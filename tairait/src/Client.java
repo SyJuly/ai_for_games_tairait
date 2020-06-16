@@ -15,16 +15,17 @@ public class Client implements Runnable {
     @Override
     public void run() {
         BoardManager boardManager = new BoardManager();
+        MoveDirector moveDirector = new MoveDirector(boardManager);
         NetworkClient nc =  new NetworkClient(null, name);
-        int playerNumber = nc.getMyPlayerNumber(); //0 = rot, 1 = grün, 2=blau, 3=gelb
+
+        moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
         boardManager.setObstacles(nc);
 
         while(nc.isAlive()){
             int botNr = 0; //0-3
-            float x = nc.getX(playerNumber, botNr);
-            float y = nc.getY(playerNumber, botNr);
-            //Brett ganzzahlig also int -> 0 - 31
-            nc.isWall(0,1); //nur der kreis
+            float x = nc.getX(moveDirector.getTeam(), botNr);
+            float y = nc.getY(moveDirector.getTeam(), botNr);
+
             nc.setMoveDirection(0, 1,1); //rechts oben, V(0,0) bleibt stehen, Länge irrelevant
             nc.setMoveDirection(1, 1,1);
             nc.setMoveDirection(2, 1,1);
@@ -34,7 +35,6 @@ public class Client implements Runnable {
             ColorChange cc;
             while((cc = nc.getNextColorChange()) != null){
                 //liste, iterator
-                //cc in eigene struktur einarbeiten
                 //cc.newColor; //o=leer; 1-4 spieler //nur einmalig abfragbar
                 boardManager.updateBoard(cc.x, cc.y, cc.newColor);
                 //punkte zählen
