@@ -39,14 +39,18 @@ public class BoardManager {
     public void updateBoard(int x, int y, int code) {
         int prevCode = board[y][x];
         board[y][x] = code;
-        if(code > 0){
-            teams[code - 1].addPoint(x,y);
-        } else if (prevCode > 0){
-            teams[prevCode - 1].removePoint(x,y);
+        if (code > 0) {
+            teams[code - 1].addPoint(x, y);
         }
-
-        System.out.println("Updated board: " + code);
+        if (prevCode > 0) {
+            teams[prevCode - 1].removePoint(x, y);
+        }
     }
 
-
+    public void printScore(){
+        for(int i = 0; i < NUM_OF_PLAYERS; i++){
+            System.out.print("Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints() + " | ");
+        }
+        System.out.println();
+    }
 }

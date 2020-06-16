@@ -22,4 +22,8 @@ public class Team {
         // x? y?
         points--;
     }
+
+    public int getPoints(){
+        return points;
+    }
 }
