@@ -15,19 +15,28 @@ public class Client implements Runnable {
     @Override
     public void run() {
         BoardManager boardManager = new BoardManager();
-        MoveDirector moveDirector = new MoveDirector(boardManager);
         NetworkClient nc =  new NetworkClient(null, name);
 
-        moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
         boardManager.setObstacles(nc);
+        MoveDirector moveDirector = new MoveDirector(boardManager);
+        moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
 
+        boolean setDirection = false;
         while(nc.isAlive()){
-            int botNr = 0; //0-3
-            float x = nc.getX(moveDirector.getTeam(), botNr);
-            float y = nc.getY(moveDirector.getTeam(), botNr);
+            for(int i = 0; i < 3; i++){
+                float x = nc.getX(moveDirector.getTeam(), i);
+                float y = nc.getY(moveDirector.getTeam(), i);
+                moveDirector.updateBot(i, x, y);
+            }
+
+            if(!setDirection){
+                moveDirector.directBots();
+                setDirection = true;
+            }
 
             for(int i = 0; i < 3; i++){
-                int[] direction = moveDirector.getMoveDirection(i);
+                float[] direction = moveDirector.getMoveDirection(i);
+                //System.out.println("Direction for bot" + i +": " + direction[0] + "|" + direction[1]);
                 nc.setMoveDirection(i, direction[0], direction[1]); //rechts oben, V(0,0) bleibt stehen, Länge irrelevant
             }
 
@@ -46,9 +55,9 @@ public class Client implements Runnable {
     public static void main(String[] args) throws IOException {
 
             new Thread(new Client("A")).start();
-            //new Thread(new Client("B")).start();
-            //new Thread(new Client("C")).start();
-            //new Thread(new Client("D")).start();
+            new Thread(new Client("B")).start();
+            new Thread(new Client("C")).start();
+            new Thread(new Client("D")).start();
 
     }
 }

@@ -30,7 +30,7 @@ public class AStar {
         nodes = new Node[world.length][world[0].length];
         for(int x = 0; x < world.length; x++){
             for(int y = 0; y < world[x].length; y++){
-                if(world[x][y] != -1){
+                if(world[x][y] >= 0){
                     nodes[x][y] = new Node(x,y);
                 }
             }
@@ -62,16 +62,37 @@ public class AStar {
         n3.adjacency.add(new Edge(n6,1));
         n6.adjacency.add(new Edge(n8,1));
         n5.adjacency.add(new Edge(n7,1));
-        System.out.println(Arrays.toString(AStarSearch(n3, n8)));
+        //System.out.println(Arrays.toString(AStarSearch(n3, n8)));
 
     }
 
-    public Node[] AStarSearch(int startX, int startY, int targetX, int targetY) {
-        return AStarSearch(nodes[startX][startY], nodes[targetX][targetY]);
+    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY) {
+        resetGraph();
+        List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY]);
+        int[][] path = new int[nodePath.size()][2];
+
+        for(int i = 0; i < nodePath.size(); i++){
+            Node node = nodePath.get(i);
+            path[i] = new int[]{node.pos[0], node.pos[1]};
+        }
+        return path;
     }
 
-    public Node[] AStarSearch(Node start, Node target) {
+    private void resetGraph() {
+        for(int x = 0; x < nodes.length; x++){
+            for(int y = 0; y < nodes[x].length; y++){
+                if(nodes[x][y] == null){
+                    continue;
+                }
+                nodes[x][y].reset();
+            }
+        }
+    }
 
+    public List<Node> AStarSearch(Node start, Node target) {
+        if(start == null || target == null){
+            System.out.println("Something went wrong. Start or target node was null.");
+        }
         start.g_cost = 0;
         start.f_cost = start.h_cost;
         PriorityQueue<Node> open = new PriorityQueue<>();
@@ -125,7 +146,7 @@ public class AStar {
         path.add(start);
         Collections.reverse(path);
         System.out.println(Arrays.toString(path.toArray()));
-        return path.toArray(new Node[path.size()]);
+        return path;
     }
 
     public static void main(String[] args) {

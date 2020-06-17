@@ -16,7 +16,24 @@ public class MoveDirector {
         bots[1] = new Bot(1f, 1);
         bots[2] = new Bot(0.67f, 2);
 
-        pathFinder.AStarSearch(13,15,20,21);
+
+    }
+
+    public void directBots(){
+        for(int i = 0; i < 3; i++){
+            int gridX = Math.round(bots[i].getX());
+            int gridY = Math.round(bots[i].getY());
+
+            int targetX = 15;
+            int targetY = 15;
+            int[][] board = boardManager.getBoard();
+            while(board[targetX][targetY] < 0){
+                targetX++;
+                targetY++;
+            }
+            int[][] path = pathFinder.AStarSearch(gridX,gridY,targetX,targetY);
+            bots[i].setPath(path);
+        }
     }
 
     public void setTeam(int ownTeam){
@@ -27,7 +44,11 @@ public class MoveDirector {
         return ownTeam;
     }
 
-    public int[] getMoveDirection(int botCode){
+    public float[] getMoveDirection(int botCode){
         return bots[botCode].getCurrentDirection();
+    }
+
+    public void updateBot(int botNr, float x, float y) {
+        bots[botNr].updatePosition(x,y);
     }
 }

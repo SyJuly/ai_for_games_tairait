@@ -28,6 +28,12 @@ public class Node implements Comparable<Node>{
         return pos[0] == position[0] && pos[1] == position[1];
     }
 
+    public void reset(){
+        g_cost = Integer.MAX_VALUE;
+        f_cost = Integer.MAX_VALUE;
+        h_cost = 0.0;
+    }
+
     @Override
     public int compareTo(Node otherNode) {
         return Double.compare(g_cost, otherNode.g_cost);
