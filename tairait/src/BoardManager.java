@@ -53,4 +53,8 @@ public class BoardManager {
         }
         System.out.println();
     }
+
+    public int[][] getBoard() {
+        return board;
+    }
 }

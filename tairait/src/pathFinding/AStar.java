@@ -14,6 +14,44 @@ public class AStar {
     Node n7 = new Node(2,1);
     Node n8 = new Node(2,2);
 
+    private final int neighbours[][] = new int[][]{
+            {-1,-1},
+            {-1, 0},
+            {-1, 1},
+            {0, -1},
+            {0,  1},
+            {1, -1},
+            {1,  0},
+            {1,  1}};
+
+    private Node[][] nodes;
+
+    public AStar(int[][] world){
+        nodes = new Node[world.length][world[0].length];
+        for(int x = 0; x < world.length; x++){
+            for(int y = 0; y < world[x].length; y++){
+                if(world[x][y] != -1){
+                    nodes[x][y] = new Node(x,y);
+                }
+            }
+        }
+        for(int x = 1; x < nodes.length - 1; x++){
+            for(int y = 1; y < nodes[x].length - 1; y++){
+                if(nodes[x][y] == null){
+                    continue;
+                }
+                for(int n = 0; n < neighbours.length; n++){
+                    int neighbour[] = neighbours[n];
+                    Node neighbourNode = nodes[x + neighbour[0]][y + neighbour[1]];
+                    if(neighbourNode != null){
+                        nodes[x][y].adjacency.add(new Edge(neighbourNode,1));
+                    }
+
+                }
+            }
+        }
+    }
+
     AStar(){
         n0.adjacency.add(new Edge(n1,1));
         n0.adjacency.add(new Edge(n2,1));
@@ -26,6 +64,10 @@ public class AStar {
         n5.adjacency.add(new Edge(n7,1));
         System.out.println(Arrays.toString(AStarSearch(n3, n8)));
 
+    }
+
+    public Node[] AStarSearch(int startX, int startY, int targetX, int targetY) {
+        return AStarSearch(nodes[startX][startY], nodes[targetX][targetY]);
     }
 
     public Node[] AStarSearch(Node start, Node target) {
@@ -61,7 +103,6 @@ public class AStar {
 
                 if (new_f_cost < neighourNode.f_cost) {
                     neighourNode.parent = current;
-                    System.out.println("setting parent " + current.toString() + " to node " + neighourNode.toString());
                     neighourNode.g_cost = new_g_cost;
                     neighourNode.f_cost = new_f_cost;
 
@@ -83,6 +124,7 @@ public class AStar {
         }
         path.add(start);
         Collections.reverse(path);
+        System.out.println(Arrays.toString(path.toArray()));
         return path.toArray(new Node[path.size()]);
     }
 

@@ -46,9 +46,9 @@ public class Client implements Runnable {
     public static void main(String[] args) throws IOException {
 
             new Thread(new Client("A")).start();
-            new Thread(new Client("B")).start();
-            new Thread(new Client("C")).start();
-            new Thread(new Client("D")).start();
+            //new Thread(new Client("B")).start();
+            //new Thread(new Client("C")).start();
+            //new Thread(new Client("D")).start();
 
     }
 }
