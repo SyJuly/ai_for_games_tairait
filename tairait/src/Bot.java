@@ -1,13 +1,15 @@
 public class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
-    private final float DISTANCE_THRESHOLD = 0.1f;
+    private final float DISTANCE_THRESHOLD = 0.2f;
 
     public float speed;
     public int botCode;
     private float x;
     private float y;
 
-    private double lastDistance = Double.POSITIVE_INFINITY;
+    //private double lastDistance = Double.POSITIVE_INFINITY;
+    private int lastX;
+    private int lastY;
 
     private int[][] path;
     private int pathIndex = -1;
@@ -25,6 +27,7 @@ public class Bot {
         updateCurrentDirection();
     }
 
+
     private void updateCurrentDirection() {
         if(path == null){
             currentDirection = WAIT_DIRECTION;
@@ -33,13 +36,24 @@ public class Bot {
 
         int[] currentTarget = path[pathIndex];
 
-        double distance = Math.hypot(x - currentTarget[0], y - currentTarget[1]);
+        if(hasPassedTarget(currentTarget)){
+            System.out.println("has passed target was true: " + pathIndex);
+            this.lastX = Math.round(x);
+            this.lastY = Math.round(y);
+            pathIndex++;
+            if(pathIndex >= path.length ){
+                path = null;
+                currentDirection = WAIT_DIRECTION;
+                System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET");
+                return;
+            }
+        }
+        setDirection();
+        //double distance = Math.hypot(x - currentTarget[0], y - currentTarget[1]);
 
 
 
-
-
-        if(distance < DISTANCE_THRESHOLD) {
+        /*if(distance < DISTANCE_THRESHOLD) {
             //System.out.println("Targeting next node: " + pathIndex);
             pathIndex++;
             lastDistance = distance;
@@ -58,7 +72,44 @@ public class Bot {
             pathIndex = closestPathIndex;
             setDirection(); //drove by target, correcting
             return;
+        }*/
+    }
+
+    private boolean hasPassedTarget(int[] currentTarget) {
+
+        int dxc = currentTarget[0] - Math.round(x);
+        float dyc = currentTarget[1] - Math.round(y);
+
+        if((dxc+dyc)==0){
+            return true;
         }
+
+        float dxl = lastX - Math.round(x);
+        float dyl = lastY - Math.round(y);
+
+        float cross = dxc * dyl - dyc * dxl;
+
+        if(botCode == 0 && path != null) {
+            System.out.print("Bot: " + botCode + "::: ");
+            System.out.print("LastX: " + lastX + "| LastY: " + lastY + "--------- X: " + x + " | Y: " + y);
+            System.out.print(" --------- Current Target: " + currentTarget[0] + "|" + currentTarget[1]);
+            System.out.print(" --------- Current direction: " + currentDirection[0] + "|" + currentDirection[1]);
+            System.out.println(" ////cross: " + cross);
+        }
+
+
+        if (cross != 0)
+            return false;
+
+        if (Math.abs(dxl) >= Math.abs(dyl))
+            return dxl > 0 ?
+                    Math.round(x) <= currentTarget[0] && currentTarget[0] <= lastX :
+                    lastX <= currentTarget[0] && currentTarget[0] <= Math.round(x);
+        else
+            return dyl > 0 ?
+                    Math.round(y) <= currentTarget[1] && currentTarget[1] <= lastY :
+                    lastY <= currentTarget[1] && currentTarget[1] <= Math.round(y);
+
     }
 
     private int correctDirection() {
@@ -77,6 +128,8 @@ public class Bot {
 
     private void setDirection() {
         int[] currentTarget = path[pathIndex];
+        this.lastX = Math.round(x);
+        this.lastY = Math.round(y);
         currentDirection = new float[]{currentTarget[0] - x, currentTarget[0] - y};
     }
 

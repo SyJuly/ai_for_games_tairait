@@ -24,8 +24,8 @@ public class MoveDirector {
             int gridX = Math.round(bots[i].getX());
             int gridY = Math.round(bots[i].getY());
 
-            int targetX = 15;
-            int targetY = 15;
+            int targetX = 20;
+            int targetY = 20;
             int[][] board = boardManager.getBoard();
             while(board[targetX][targetY] < 0){
                 targetX++;

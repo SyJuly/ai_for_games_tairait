@@ -16,12 +16,8 @@ public class AStar {
 
     private final int neighbours[][] = new int[][]{
             {-1,-1},
-            {-1, 0},
             {-1, 1},
-            {0, -1},
-            {0,  1},
             {1, -1},
-            {1,  0},
             {1,  1}};
 
     private Node[][] nodes;
@@ -44,9 +40,8 @@ public class AStar {
                     int neighbour[] = neighbours[n];
                     Node neighbourNode = nodes[x + neighbour[0]][y + neighbour[1]];
                     if(neighbourNode != null){
-                        nodes[x][y].adjacency.add(new Edge(neighbourNode,1));
+                        nodes[x][y].addNeighbour(neighbourNode,1);
                     }
-
                 }
             }
         }
@@ -90,9 +85,13 @@ public class AStar {
     }
 
     public List<Node> AStarSearch(Node start, Node target) {
-        if(start == null || target == null){
-            System.out.println("Something went wrong. Start or target node was null.");
+        if(start == null){
+            System.out.println("Something went wrong. Start node was null.");
         }
+        if(target == null){
+            System.out.println("Something went wrong. Target node was null.");
+        }
+
         start.g_cost = 0;
         start.f_cost = start.h_cost;
         PriorityQueue<Node> open = new PriorityQueue<>();
@@ -110,7 +109,7 @@ public class AStar {
                 break;
             }
             if (visited.contains(current)) {
-                continue;
+                //continue;
             }
             visited.add(current);
             // check all the neighbours
@@ -139,11 +138,23 @@ public class AStar {
 
         List<Node> path = new ArrayList<>();
         Node next = target;
+        if(target == null){
+            System.out.println("First Next or target was null");
+        }
         while (!next.isPosition(start.pos)) {
             path.add(next);
+
+            if(next.parent == null){
+                System.out.println("Next was null");
+                System.out.println("Error: " + Arrays.toString(path.toArray()));
+            }
             next = next.parent;
         }
         path.add(start);
+        if(path == null){
+            System.out.println("Path was null");
+        }
+        System.out.println("Unreversed path: " +Arrays.toString(path.toArray()));
         Collections.reverse(path);
         System.out.println(Arrays.toString(path.toArray()));
         return path;

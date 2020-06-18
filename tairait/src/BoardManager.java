@@ -29,7 +29,6 @@ public class BoardManager {
                 if(client.isWall(x,y)){
                     board[x][y] = -1;
                     counter++;
-
                 }
             }
         }

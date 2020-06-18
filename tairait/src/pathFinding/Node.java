@@ -21,7 +21,7 @@ public class Node implements Comparable<Node>{
     }
 
     public String toString(){
-        return "N(" + pos[0] + "|" + pos[1] +")";
+        return "N(" + pos[0] + "," + pos[1] + "|E:" + adjacency.size() + ")";
     }
 
     public boolean isPosition(int[] position){
@@ -29,6 +29,7 @@ public class Node implements Comparable<Node>{
     }
 
     public void reset(){
+        parent = null;
         g_cost = Integer.MAX_VALUE;
         f_cost = Integer.MAX_VALUE;
         h_cost = 0.0;
