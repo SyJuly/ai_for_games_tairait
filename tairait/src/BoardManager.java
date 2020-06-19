@@ -29,7 +29,11 @@ public class BoardManager {
                 if(client.isWall(x,y)){
                     board[x][y] = -1;
                     counter++;
+                    if((x >=13 && x <=20) && (y>=8 && y<=20)){
+                        System.out.println("Obstacle: " + x + "|" + y);
+                    }
                 }
+
             }
         }
         System.out.println("Found " + counter + " obstacles.");

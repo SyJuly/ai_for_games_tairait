@@ -33,20 +33,24 @@ public class Bot {
             currentDirection = WAIT_DIRECTION;
             return;
         }
+        /*if(pathIndex == path.length - 1 && (int)x == path[path.length - 1][0] && (int)y == path[path.length - 1][1]){
+            //reached final goal
+            path = null;
+            currentDirection = WAIT_DIRECTION;
+            System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
+            return;
+        }*/
 
         int[] currentTarget = path[pathIndex];
-
         if(hasPassedTarget(currentTarget)){
             System.out.println("has passed target was true: " + pathIndex);
-            this.lastX = Math.round(x);
-            this.lastY = Math.round(y);
+
             pathIndex++;
-            if(pathIndex >= path.length ){
-                path = null;
-                currentDirection = WAIT_DIRECTION;
-                System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET");
-                return;
+            if(pathIndex > path.length - 1){
+                System.out.println("Something went wrong, passed target without passing target: P(" + x + "|" + y + "), PL("+ lastX + "|" + lastY + ") -----target was: " + path[pathIndex - 1][0] + "|" + path[pathIndex - 1][1]);
             }
+            this.lastX = (int)x;
+            this.lastY = (int)y;
         }
         setDirection();
         //double distance = Math.hypot(x - currentTarget[0], y - currentTarget[1]);
@@ -75,40 +79,42 @@ public class Bot {
         }*/
     }
 
+
     private boolean hasPassedTarget(int[] currentTarget) {
 
-        int dxc = currentTarget[0] - Math.round(x);
-        float dyc = currentTarget[1] - Math.round(y);
+        int dxc = currentTarget[0] - (int)x;
+        float dyc = currentTarget[1] - (int)y;
 
-        if((dxc+dyc)==0){
-            return true;
-        }
-
-        float dxl = lastX - Math.round(x);
-        float dyl = lastY - Math.round(y);
-
+        float dxl = lastX - (int)x;
+        float dyl = lastY - (int)y;
         float cross = dxc * dyl - dyc * dxl;
-
-        if(botCode == 0 && path != null) {
+        /*if(botCode == 0 && path != null) {
             System.out.print("Bot: " + botCode + "::: ");
             System.out.print("LastX: " + lastX + "| LastY: " + lastY + "--------- X: " + x + " | Y: " + y);
             System.out.print(" --------- Current Target: " + currentTarget[0] + "|" + currentTarget[1]);
             System.out.print(" --------- Current direction: " + currentDirection[0] + "|" + currentDirection[1]);
             System.out.println(" ////cross: " + cross);
-        }
-
+        }*/
 
         if (cross != 0)
             return false;
 
         if (Math.abs(dxl) >= Math.abs(dyl))
             return dxl > 0 ?
-                    Math.round(x) <= currentTarget[0] && currentTarget[0] <= lastX :
-                    lastX <= currentTarget[0] && currentTarget[0] <= Math.round(x);
+                    (int)x <= currentTarget[0] && currentTarget[0] <= lastX :
+                    lastX <= currentTarget[0] && currentTarget[0] <= (int)x;
         else
             return dyl > 0 ?
-                    Math.round(y) <= currentTarget[1] && currentTarget[1] <= lastY :
-                    lastY <= currentTarget[1] && currentTarget[1] <= Math.round(y);
+                    (int)y <= currentTarget[1] && currentTarget[1] <= lastY :
+                    lastY <= currentTarget[1] && currentTarget[1] <= (int)y;
+
+    }
+
+    private boolean passedTarget(int[] currentTarget) {
+        float dx = lastX - x;
+        float dy = lastY - y;
+
+
 
     }
 
@@ -128,9 +134,9 @@ public class Bot {
 
     private void setDirection() {
         int[] currentTarget = path[pathIndex];
-        this.lastX = Math.round(x);
-        this.lastY = Math.round(y);
-        currentDirection = new float[]{currentTarget[0] - x, currentTarget[0] - y};
+        this.lastX = (int)x;
+        this.lastY = (int)y;
+        currentDirection = new float[]{currentTarget[0] - x, currentTarget[1] - y};
     }
 
     public void setPath(int[][] path){

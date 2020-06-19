@@ -14,10 +14,13 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Player:  " + name);
         BoardManager boardManager = new BoardManager();
         NetworkClient nc =  new NetworkClient(null, name);
 
         boardManager.setObstacles(nc);
+        System.out.println("Is 17|17 obstacle:  " + nc.isWall(17,17));
+        System.out.println("Is 18|18 obstacle:  " + nc.isWall(18,18));
         MoveDirector moveDirector = new MoveDirector(boardManager);
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
 

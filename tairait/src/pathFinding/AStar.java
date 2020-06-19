@@ -14,11 +14,16 @@ public class AStar {
     Node n7 = new Node(2,1);
     Node n8 = new Node(2,2);
 
-    private final int neighbours[][] = new int[][]{
+    public final int NEIGHBOURS[][] = new int[][]{
             {-1,-1},
+            {-1,0},
             {-1, 1},
+            {0,1},
+            {1,  1},
+            {1,0},
             {1, -1},
-            {1,  1}};
+            {0,-1}};
+
 
     private Node[][] nodes;
 
@@ -36,15 +41,35 @@ public class AStar {
                 if(nodes[x][y] == null){
                     continue;
                 }
-                for(int n = 0; n < neighbours.length; n++){
-                    int neighbour[] = neighbours[n];
+                for(int n = 0; n < NEIGHBOURS.length; n++){
+                    int neighbour[] = NEIGHBOURS[n];
                     Node neighbourNode = nodes[x + neighbour[0]][y + neighbour[1]];
-                    if(neighbourNode != null){
+                    if(neighbourNode != null && !isCriticalDiagonal(n, nodes[x][y])){
                         nodes[x][y].addNeighbour(neighbourNode,1);
                     }
                 }
             }
         }
+    }
+
+    private boolean isCriticalDiagonal(int neighbourIndex, Node currentNode) {
+        int[] neighbour = NEIGHBOURS[neighbourIndex];
+        if(neighbour[0] == 0 || neighbour[1] == 0){
+            return false;
+        }
+        return isNeighbourWall(neighbourIndex + 1, currentNode) || isNeighbourWall(neighbourIndex - 1, currentNode);
+    }
+
+    private boolean isNeighbourWall(int neighbourIndex, Node currentNode) {
+        int[] neighbour;
+        if(neighbourIndex > NEIGHBOURS.length - 1){
+            neighbour = NEIGHBOURS[0];
+        } else if (neighbourIndex < 0){
+            neighbour = NEIGHBOURS[NEIGHBOURS.length - 1];
+        } else{
+            neighbour = NEIGHBOURS[neighbourIndex];
+        }
+        return nodes[currentNode.pos[0] + neighbour[0]][currentNode.pos[1] + neighbour[1]] == null;
     }
 
     AStar(){
@@ -63,6 +88,9 @@ public class AStar {
 
     public int[][] AStarSearch(int startX, int startY, int targetX, int targetY) {
         resetGraph();
+        if(nodes[startX][startY] == null){
+            System.out.println("Something went wrong. Start node was null: " + startX + "|" + startY);
+        }
         List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY]);
         int[][] path = new int[nodePath.size()][2];
 
@@ -94,8 +122,16 @@ public class AStar {
 
         start.g_cost = 0;
         start.f_cost = start.h_cost;
-        PriorityQueue<Node> open = new PriorityQueue<>();
-        HashSet<Node> visited = new HashSet<>();
+
+        PriorityQueue<Node> open = new PriorityQueue<>(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return Double.compare(o1.f_cost, o2.f_cost);
+            }
+
+        });
+
+        HashSet<Node> closed = new HashSet<>();
 
         open.add(start);
         int numberOfSteps = 0;
@@ -107,32 +143,39 @@ public class AStar {
             // we have found the target
             if (current.isPosition(target.pos)) {
                 break;
+
             }
-            if (visited.contains(current)) {
-                //continue;
-            }
-            visited.add(current);
-            // check all the neighbours
+
+            // check all the NEIGHBOURS
 
             for (Edge edge: current.adjacency) {
                 Node neighourNode = edge.target;
+
+                boolean isOpen = open.contains(neighourNode);
+                boolean isClosed = closed.contains(neighourNode);
+
                 double cost = edge.cost;
 
                 double new_g_cost = current.g_cost + cost;
                 double new_f_cost = neighourNode.h_cost + new_g_cost;
 
-                if (new_f_cost < neighourNode.f_cost) {
+                if ((!isOpen && !isClosed) && new_f_cost < neighourNode.f_cost) {
                     neighourNode.parent = current;
                     neighourNode.g_cost = new_g_cost;
                     neighourNode.f_cost = new_f_cost;
 
-                    if (open.contains(neighourNode)) {
-                        open.remove(neighourNode);
+                    if (isClosed) {
+                        closed.remove(neighourNode);
                     }
-
-                    open.add(neighourNode);
+                    if (!isOpen) {
+                        open.add(neighourNode);
+                    }
+                }
+                if(neighourNode.isPosition(target.pos)){
+                    System.out.println("Parent of target? " + neighourNode.parent);
                 }
             }
+            closed.add(current);
         }
         System.out.println("Number of steps: " + numberOfSteps);
 
@@ -154,7 +197,6 @@ public class AStar {
         if(path == null){
             System.out.println("Path was null");
         }
-        System.out.println("Unreversed path: " +Arrays.toString(path.toArray()));
         Collections.reverse(path);
         System.out.println(Arrays.toString(path.toArray()));
         return path;

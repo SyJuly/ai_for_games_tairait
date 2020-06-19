@@ -3,7 +3,7 @@ package pathFinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node implements Comparable<Node>{
+public class Node{
     public int[] pos;
     public List<Edge> adjacency = new ArrayList<>();
     public Node parent;
@@ -35,8 +35,4 @@ public class Node implements Comparable<Node>{
         h_cost = 0.0;
     }
 
-    @Override
-    public int compareTo(Node otherNode) {
-        return Double.compare(g_cost, otherNode.g_cost);
-    }
 }
