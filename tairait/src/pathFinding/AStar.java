@@ -88,9 +88,6 @@ public class AStar {
 
     public int[][] AStarSearch(int startX, int startY, int targetX, int targetY) {
         resetGraph();
-        if(nodes[startX][startY] == null){
-            System.out.println("Something went wrong. Start node was null: " + startX + "|" + startY);
-        }
         List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY]);
         int[][] path = new int[nodePath.size()][2];
 
@@ -171,9 +168,6 @@ public class AStar {
                         open.add(neighourNode);
                     }
                 }
-                if(neighourNode.isPosition(target.pos)){
-                    System.out.println("Parent of target? " + neighourNode.parent);
-                }
             }
             closed.add(current);
         }
@@ -181,9 +175,6 @@ public class AStar {
 
         List<Node> path = new ArrayList<>();
         Node next = target;
-        if(target == null){
-            System.out.println("First Next or target was null");
-        }
         while (!next.isPosition(start.pos)) {
             path.add(next);
 
@@ -194,9 +185,6 @@ public class AStar {
             next = next.parent;
         }
         path.add(start);
-        if(path == null){
-            System.out.println("Path was null");
-        }
         Collections.reverse(path);
         System.out.println(Arrays.toString(path.toArray()));
         return path;
