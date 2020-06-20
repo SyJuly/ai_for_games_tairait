@@ -8,8 +8,8 @@ public class Bot {
     private float y;
 
     //private double lastDistance = Double.POSITIVE_INFINITY;
-    private int lastX;
-    private int lastY;
+    private float lastX;
+    private float lastY;
 
     private int[][] path;
     private int pathIndex = -1;
@@ -33,24 +33,27 @@ public class Bot {
             currentDirection = WAIT_DIRECTION;
             return;
         }
-        /*if(pathIndex == path.length - 1 && (int)x == path[path.length - 1][0] && (int)y == path[path.length - 1][1]){
+        if(pathIndex == path.length - 1 && (int)x == path[path.length - 1][0] && (int)y == path[path.length - 1][1]){
             //reached final goal
             path = null;
             currentDirection = WAIT_DIRECTION;
             System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
             return;
-        }*/
+        }
 
         int[] currentTarget = path[pathIndex];
-        if(hasPassedTarget(currentTarget)){
+        if(passedTarget(currentTarget)){
             System.out.println("has passed target was true: " + pathIndex);
 
             pathIndex++;
             if(pathIndex > path.length - 1){
+                //pathIndex--;
+                //setDirection();
                 System.out.println("Something went wrong, passed target without passing target: P(" + x + "|" + y + "), PL("+ lastX + "|" + lastY + ") -----target was: " + path[pathIndex - 1][0] + "|" + path[pathIndex - 1][1]);
+                //return;
             }
-            this.lastX = (int)x;
-            this.lastY = (int)y;
+            this.lastX = x;
+            this.lastY = y;
         }
         setDirection();
         //double distance = Math.hypot(x - currentTarget[0], y - currentTarget[1]);
@@ -75,6 +78,7 @@ public class Bot {
             int closestPathIndex = correctDirection();
             pathIndex = closestPathIndex;
             setDirection(); //drove by target, correcting
+
             return;
         }*/
     }
@@ -82,39 +86,46 @@ public class Bot {
 
     private boolean hasPassedTarget(int[] currentTarget) {
 
-        int dxc = currentTarget[0] - (int)x;
-        float dyc = currentTarget[1] - (int)y;
+        float dxc = currentTarget[0] - x;
+        float dyc = currentTarget[1] - y;
 
-        float dxl = lastX - (int)x;
-        float dyl = lastY - (int)y;
+        float dxl = lastX - x;
+        float dyl = lastY - y;
         float cross = dxc * dyl - dyc * dxl;
-        /*if(botCode == 0 && path != null) {
+        if(botCode == 0 && path != null) {
             System.out.print("Bot: " + botCode + "::: ");
             System.out.print("LastX: " + lastX + "| LastY: " + lastY + "--------- X: " + x + " | Y: " + y);
             System.out.print(" --------- Current Target: " + currentTarget[0] + "|" + currentTarget[1]);
             System.out.print(" --------- Current direction: " + currentDirection[0] + "|" + currentDirection[1]);
             System.out.println(" ////cross: " + cross);
-        }*/
+        }
 
         if (cross != 0)
             return false;
 
         if (Math.abs(dxl) >= Math.abs(dyl))
             return dxl > 0 ?
-                    (int)x <= currentTarget[0] && currentTarget[0] <= lastX :
-                    lastX <= currentTarget[0] && currentTarget[0] <= (int)x;
+                    x <= currentTarget[0] && currentTarget[0] <= lastX :
+                    lastX <= currentTarget[0] && currentTarget[0] <= x;
         else
             return dyl > 0 ?
-                    (int)y <= currentTarget[1] && currentTarget[1] <= lastY :
-                    lastY <= currentTarget[1] && currentTarget[1] <= (int)y;
+                    y <= currentTarget[1] && currentTarget[1] <= lastY :
+                    lastY <= currentTarget[1] && currentTarget[1] <= y;
 
     }
 
     private boolean passedTarget(int[] currentTarget) {
-        float dx = lastX - x;
-        float dy = lastY - y;
+        float nx = -(lastX - x);
+        float ny = lastY - y;
 
+        float ix = currentTarget[0] + nx;
+        float iy = currentTarget[1] + ny;
 
+        //d=(x-x1)(y2-y1) - (y-y1)(x2-x1)
+        float d1 =(lastX - currentTarget[0]) * (iy - currentTarget[1]) - (lastY - currentTarget[1]) * (ix - currentTarget[0]);
+        float d2 =(x - currentTarget[0]) * (iy - currentTarget[1]) - (y - currentTarget[1]) * (ix - currentTarget[0]);
+
+        return Math.signum(d1) == Math.signum(d2);
 
     }
 
@@ -134,8 +145,8 @@ public class Bot {
 
     private void setDirection() {
         int[] currentTarget = path[pathIndex];
-        this.lastX = (int)x;
-        this.lastY = (int)y;
+        this.lastX = x;
+        this.lastY = y;
         currentDirection = new float[]{currentTarget[0] - x, currentTarget[1] - y};
     }
 
