@@ -33,24 +33,16 @@ public class Bot {
             currentDirection = WAIT_DIRECTION;
             return;
         }
-        if(pathIndex == path.length - 1 && (int)x == path[path.length - 1][0] && (int)y == path[path.length - 1][1]){
-            //reached final goal
-            path = null;
-            currentDirection = WAIT_DIRECTION;
-            System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
-            return;
-        }
 
         int[] currentTarget = path[pathIndex];
-        if(passedTarget(currentTarget)){
-            System.out.println("has passed target was true: " + pathIndex);
-
+        if(hasSteppedOnTarget(currentTarget)){
+            System.out.println("Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
             pathIndex++;
             if(pathIndex > path.length - 1){
-                //pathIndex--;
-                //setDirection();
-                System.out.println("Something went wrong, passed target without passing target: P(" + x + "|" + y + "), PL("+ lastX + "|" + lastY + ") -----target was: " + path[pathIndex - 1][0] + "|" + path[pathIndex - 1][1]);
-                //return;
+                path = null;
+                currentDirection = WAIT_DIRECTION;
+                System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
+                return;
             }
             this.lastX = x;
             this.lastY = y;
@@ -81,6 +73,16 @@ public class Bot {
 
             return;
         }*/
+    }
+
+    private boolean hasSteppedOnTarget(int[] currentTarget){
+        if((currentDirection[0] >= 0 && currentTarget[0] >= lastX && currentTarget[0] <= x)
+        || (currentDirection[0] < 0 && currentTarget[0] <= lastX && currentTarget[0] >= x)){
+            float u = (currentTarget[0] - x)/currentDirection[0];
+            int yi =(int) (y + u * currentDirection[1]);
+            return currentTarget[1] == yi;
+        }
+        return false;
     }
 
 
