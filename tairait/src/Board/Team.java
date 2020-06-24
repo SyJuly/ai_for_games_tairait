@@ -27,7 +27,7 @@ public class Team {
         points.remove(point);
     }
 
-    public int getPoints(){
-        return points.size();
+    public List<Point> getPoints(){
+        return points;
     }
 }

@@ -16,7 +16,7 @@ public class AStar {
     Node n7 = new Node(2,1);
     Node n8 = new Node(2,2);
 
-    public final int NEIGHBOURS[][] = new int[][]{
+    public final static int NEIGHBOURS[][] = new int[][]{
             {-1,-1},
             {-1,0},
             {-1, 1},

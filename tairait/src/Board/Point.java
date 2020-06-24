@@ -10,4 +10,8 @@ public class Point {
         this.y = y;
         statusCode = 0; // empty
     }
+
+    public String toString(){
+        return "P(" + x + "," + y + "|" + statusCode + ")";
+    }
 }

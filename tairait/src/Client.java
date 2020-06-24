@@ -24,7 +24,10 @@ public class Client implements Runnable {
         MoveDirector moveDirector = new MoveDirector(boardManager);
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
 
+        long start = System.currentTimeMillis();
         boolean setDirection = false;
+        boolean printedCluster = false;
+
         while(nc.isAlive()){
             for(int i = 0; i < 3; i++){
                 float x = nc.getX(moveDirector.getTeam(), i);
@@ -35,6 +38,10 @@ public class Client implements Runnable {
             if(!setDirection){
                 moveDirector.directBots();
                 setDirection = true;
+            }
+            if(!printedCluster && System.currentTimeMillis() - start > 50000){
+                moveDirector.printCluster();
+                printedCluster = true;
             }
 
             for(int i = 0; i < 3; i++){
@@ -51,16 +58,17 @@ public class Client implements Runnable {
 
             //boardManager.printScore();
         }
+
     }
 
     //spieler werden im mittleren drittel gespawnt
     //space starten
     public static void main(String[] args) throws IOException {
-            //new Client("a").run();
-            new Thread(new Client("A")).start();
-            new Thread(new Client("B")).start();
-            new Thread(new Client("C")).start();
-            new Thread(new Client("D")).start();
+            new Client("a").run();
+            //new Thread(new Client("A")).start();
+            //new Thread(new Client("B")).start();
+            //new Thread(new Client("C")).start();
+            //new Thread(new Client("D")).start();
 
     }
 }

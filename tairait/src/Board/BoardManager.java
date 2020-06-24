@@ -43,6 +43,9 @@ public class BoardManager {
         Point point = board[y][x];
         int prevCode = point.statusCode;
         point.statusCode = code;
+        if(code == prevCode){
+            return;
+        }
         if (code > 0) {
             teams[code - 1].addPoint(point);
         }
@@ -53,12 +56,16 @@ public class BoardManager {
 
     public void printScore(){
         for(int i = 0; i < NUM_OF_PLAYERS; i++){
-            System.out.print("Board.Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints() + " | ");
+            System.out.print("Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints() + " | ");
         }
         System.out.println();
     }
 
     public Point[][] getBoard() {
         return board;
+    }
+
+    public Team[] getTeams() {
+        return teams;
     }
 }
