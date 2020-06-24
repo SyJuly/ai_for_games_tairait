@@ -1,4 +1,9 @@
-import pathFinding.AStar;
+package AI;
+
+import Board.BoardManager;
+import Board.Bot;
+import Board.Point;
+import PathFinding.AStar;
 
 public class MoveDirector {
     private final int NUM_OF_BOTS = 3;
@@ -26,8 +31,8 @@ public class MoveDirector {
 
             int targetX = 20;
             int targetY = 20;
-            int[][] board = boardManager.getBoard();
-            while(board[targetX][targetY] < 0){
+            Point[][] board = boardManager.getBoard();
+            while(board[targetX][targetY].statusCode < 0){
                 targetX++;
                 targetY++;
             }

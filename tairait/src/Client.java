@@ -1,5 +1,7 @@
 
 
+import AI.MoveDirector;
+import Board.BoardManager;
 import lenz.htw.tiarait.ColorChange;
 import lenz.htw.tiarait.net.NetworkClient;
 
@@ -54,11 +56,11 @@ public class Client implements Runnable {
     //spieler werden im mittleren drittel gespawnt
     //space starten
     public static void main(String[] args) throws IOException {
-            new Client("a").run();
-            //new Thread(new Client("A")).start();
-            //new Thread(new Client("B")).start();
-            //new Thread(new Client("C")).start();
-            //new Thread(new Client("D")).start();
+            //new Client("a").run();
+            new Thread(new Client("A")).start();
+            new Thread(new Client("B")).start();
+            new Thread(new Client("C")).start();
+            new Thread(new Client("D")).start();
 
     }
 }

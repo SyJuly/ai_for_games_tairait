@@ -1,4 +1,4 @@
-package pathFinding;
+package PathFinding;
 
 public class Edge{
     public double cost;

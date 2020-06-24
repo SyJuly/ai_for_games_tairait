@@ -1,3 +1,5 @@
+package Board;
+
 public class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
 
@@ -34,7 +36,7 @@ public class Bot {
 
         int[] currentTarget = path[pathIndex];
         if(hasSteppedOnTarget(currentTarget)){
-            //System.out.println("Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
+            //System.out.println("Board.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
             pathIndex++;
             if(pathIndex > path.length - 1){
                 path = null;

@@ -1,4 +1,6 @@
-package pathFinding;
+package PathFinding;
+
+import Board.Point;
 
 import java.util.*;
 
@@ -27,11 +29,11 @@ public class AStar {
 
     private Node[][] nodes;
 
-    public AStar(int[][] world){
+    public AStar(Point[][] world){
         nodes = new Node[world.length][world[0].length];
         for(int x = 0; x < world.length; x++){
             for(int y = 0; y < world[x].length; y++){
-                if(world[x][y] >= 0){
+                if(world[x][y].statusCode >= 0){
                     nodes[x][y] = new Node(x,y);
                 }
             }

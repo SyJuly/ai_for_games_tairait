@@ -1,29 +1,33 @@
+package Board;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Team {
     private int teamCode;
-    private int points;
+    private List<Point> points;
 
     public Team(int teamCode){
         this.teamCode = teamCode;
+        points = new ArrayList<>();
     }
 
-    public void addPoint(int x, int y){
+    public void addPoint(Point point){
         // x? y?
-        points++;
+        points.add(point);
     }
 
     public int getTeamCode() {
         return teamCode;
     }
 
-    public void removePoint(int x, int y) {
+    public void removePoint(Point point) {
         // x? y?
-        points--;
+        points.remove(point);
     }
 
     public int getPoints(){
-        return points;
+        return points.size();
     }
 }

@@ -1,3 +1,5 @@
+package Board;
+
 import lenz.htw.tiarait.net.NetworkClient;
 
 public class BoardManager {
@@ -13,7 +15,7 @@ public class BoardManager {
          3 = team 2
          4 = team 3
      */
-    private int[][] board = new int[WORLD_SIZE][WORLD_SIZE];
+    private Point[][] board = new Point[WORLD_SIZE][WORLD_SIZE];
     private Team[] teams = new Team[NUM_OF_PLAYERS];
 
     public BoardManager(){
@@ -26,8 +28,9 @@ public class BoardManager {
         int counter = 0;
         for(int x = 0; x < board.length; x++){
             for(int y = 0; y < board[x].length; y++){
+                board[x][y] = new Point(x,y);
                 if(client.isWall(x,y)){
-                    board[x][y] = -1;
+                    board[x][y].statusCode = -1;
                     counter++;
                 }
 
@@ -37,24 +40,25 @@ public class BoardManager {
     }
 
     public void updateBoard(int x, int y, int code) {
-        int prevCode = board[y][x];
-        board[y][x] = code;
+        Point point = board[y][x];
+        int prevCode = point.statusCode;
+        point.statusCode = code;
         if (code > 0) {
-            teams[code - 1].addPoint(x, y);
+            teams[code - 1].addPoint(point);
         }
         if (prevCode > 0) {
-            teams[prevCode - 1].removePoint(x, y);
+            teams[prevCode - 1].removePoint(point);
         }
     }
 
     public void printScore(){
         for(int i = 0; i < NUM_OF_PLAYERS; i++){
-            System.out.print("Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints() + " | ");
+            System.out.print("Board.Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints() + " | ");
         }
         System.out.println();
     }
 
-    public int[][] getBoard() {
+    public Point[][] getBoard() {
         return board;
     }
 }
