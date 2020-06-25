@@ -13,7 +13,7 @@ public class Clusterer {
 
     private BoardManager boardManager;
 
-    int minPts = 4;
+    int minPts = 2;
 
     public Clusterer(BoardManager boardManager){
         this.boardManager = boardManager;
@@ -58,14 +58,14 @@ public class Clusterer {
                 List<Point> currentNeighbors = getNeighbors(current, points);
                 if (currentNeighbors.size() >= minPts) {
                     for (Point p : currentNeighbors) {
-                        if (!seeds.contains(point)) {
+                        if (!seeds.contains(p)) {
                             seeds.add(p);
                         }
                     }
                 }
             }
 
-            if (visited.containsKey(current) && visited.get(current) != PART_OF_CLUSTER) {
+            if (!visited.containsKey(current) || (visited.containsKey(current) && visited.get(current) != PART_OF_CLUSTER)) {
                 visited.put(current, PART_OF_CLUSTER);
                 cluster.add(current);
             }

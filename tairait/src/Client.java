@@ -16,14 +16,14 @@ public class Client implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Player:  " + name);
+
         BoardManager boardManager = new BoardManager();
         NetworkClient nc =  new NetworkClient(null, name);
 
         boardManager.setObstacles(nc);
         MoveDirector moveDirector = new MoveDirector(boardManager);
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
-
+        System.out.println("Player:  " + name + "--- Team: " + nc.getMyPlayerNumber());
         long start = System.currentTimeMillis();
         boolean setDirection = false;
         boolean printedCluster = false;
@@ -39,7 +39,7 @@ public class Client implements Runnable {
                 moveDirector.directBots();
                 setDirection = true;
             }
-            if(!printedCluster && System.currentTimeMillis() - start > 50000){
+            if(!printedCluster && System.currentTimeMillis() - start > 30000){
                 moveDirector.printCluster();
                 printedCluster = true;
             }
