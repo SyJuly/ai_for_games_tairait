@@ -1,6 +1,6 @@
 package Board;
 
-public class Bot {
+public /*abstract*/ class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
 
     public float speed;
@@ -73,6 +73,8 @@ public class Bot {
         System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
         setDirection();
     }
+
+    //public abstract void findNextPath(Point[][] board, Team[] teams);
 
     public float[] getCurrentDirection() {
         return currentDirection;

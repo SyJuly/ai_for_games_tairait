@@ -52,6 +52,38 @@ public class AStar {
                 }
             }
         }
+        overrideEdges_preferOuterSpace();
+    }
+
+    public void overrideEdges_preferOuterSpace(){
+        Point maxPoint = null;
+        double maxVal = Double.NEGATIVE_INFINITY;
+        double minVal = Double.POSITIVE_INFINITY;
+        Point minPoint = null;
+        for(int x = 1; x < nodes.length - 1; x++){
+            for(int y = 1; y < nodes[x].length - 1; y++){
+                Node node = nodes[x][y];
+                if(nodes[x][y] == null){
+                    continue;
+                }
+                double eX = (1.0/(0.5*Math.sqrt(2 * Math.PI)))* Math.pow(Math.E, -0.5 * Math.pow((x-15.0)/0.5, 2));
+                double eY = (1.0/(0.5*Math.sqrt(2 * Math.PI)))* Math.pow(Math.E, -0.5 * Math.pow((y-15.0)/0.5,2));
+                double cost = 1 + eX + eY;
+                if(maxPoint == null || maxVal < cost){
+                    maxPoint = new Point(x,y);
+                    maxVal = cost;
+                }
+                if(minPoint == null || minVal > cost){
+                    minPoint = new Point(x,y);
+                    minVal = cost;
+                }
+                for(int e = 0; e < node.adjacency.size(); e++){
+                    node.adjacency.get(e).cost = cost;
+                }
+            }
+        }
+        //System.out.println("Max Cost: " + maxVal + " at " + maxPoint);
+        //System.out.println("Min Cost: " + minVal + " at " + minPoint);
     }
 
     private boolean isCriticalDiagonal(int neighbourIndex, Node currentNode) {
