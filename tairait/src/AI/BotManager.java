@@ -2,7 +2,11 @@ package AI;
 
 import Board.BoardManager;
 import Board.Point;
+import Board.Team;
 import PathFinding.AStar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BotManager {
     private final int NUM_OF_BOTS = 3;
@@ -25,21 +29,57 @@ public class BotManager {
 
     }
 
-    public void directBots(){
-        for(int i = 0; i < 3; i++){
-            int gridX = (int)bots[i].getX();
-            int gridY = (int)bots[i].getY();
+    public void updateBotsTargets(){
+        updateGraph();
+        bots[0].findNextPath(clusterer, pathFinder, getNonPossedPoints());
+        bots[1].findNextPath(clusterer, pathFinder, getPossedPoints());
+        bots[2].findNextPath(clusterer, pathFinder, getBestTeamPoints());
+    }
 
-            int targetX = 16;
-            int targetY = 4;
-            Point[][] board = boardManager.getBoard();
-            while(board[targetX][targetY].statusCode < 0){
-                targetX++;
-                targetY++;
+    private List<Point> getBestTeamPoints() {
+        Team[] teams = boardManager.getTeams();
+        List<Point> bestTeamPoints = teams[0].getPoints();
+        for(int i = 1; i < teams.length; i++){
+            if(bestTeamPoints.size() < teams[i].getPoints().size()){
+                bestTeamPoints = teams[i].getPoints();
             }
-            int[][] path = pathFinder.AStarSearch(gridX,gridY,targetX,targetY);
-            bots[i].setPath(path);
         }
+        if(bestTeamPoints.size() == 0){
+            System.out.println("Something went wrong. Could not find no best team points.");
+        }
+        return bestTeamPoints;
+    }
+
+    private List<Point> getPossedPoints() {
+        List<Point> possedPoints = new ArrayList<>();
+        Team[] teams = boardManager.getTeams();
+        for(Team team : teams){
+            possedPoints.addAll(team.getPoints());
+        }
+        if(possedPoints.size() == 0){
+            System.out.println("Something went wrong. Could not find no possed points.");
+        }
+        return possedPoints;
+    }
+
+    private List<Point> getNonPossedPoints() {
+        List<Point> nonPossedPoints = new ArrayList<>();
+        Point[][] board = boardManager.getBoard();
+        for(int x = 0; x < board.length; x++){
+            for(int y = 0; y < board[x].length; y++){
+                if(board[x][y].statusCode == 0){
+                    nonPossedPoints.add(board[x][y]);
+                }
+            }
+        }
+        if(nonPossedPoints.size() == 0){
+            System.out.println("Something went wrong. Could not find no non-possed points.");
+        }
+        return nonPossedPoints;
+    }
+
+    public void updateGraph(){
+        pathFinder.updateOwnFieldAvoidence(boardManager.getBoard(), ownTeam + 1);
     }
 
     public void printCluster(){

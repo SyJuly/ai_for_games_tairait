@@ -6,16 +6,6 @@ import java.util.*;
 
 public class AStar {
 
-    Node n0 = new Node(0,0);
-    Node n1 = new Node(0,1);
-    Node n2 = new Node(1,0);
-    Node n3 = new Node(1,1);
-    Node n4 = new Node(0,2);
-    Node n5 = new Node(2,0);
-    Node n6 = new Node(1,2);
-    Node n7 = new Node(2,1);
-    Node n8 = new Node(2,2);
-
     public final static int NEIGHBOURS[][] = new int[][]{
             {-1,-1},
             {-1,0},
@@ -59,37 +49,6 @@ public class AStar {
         }
     }
 
-    /*public void overrideEdges_preferOuterSpace(){
-        Point maxPoint = null;
-        double maxVal = Double.NEGATIVE_INFINITY;
-        double minVal = Double.POSITIVE_INFINITY;
-        Point minPoint = null;
-        for(int x = 1; x < nodes.length - 1; x++){
-            for(int y = 1; y < nodes[x].length - 1; y++){
-                Node node = nodes[x][y];
-                if(nodes[x][y] == null){
-                    continue;
-                }
-                double eX = (1.0/(0.5*Math.sqrt(2 * Math.PI)))* Math.pow(Math.E, -0.5 * Math.pow((x-15.0)/0.5, 2));
-                double eY = (1.0/(0.5*Math.sqrt(2 * Math.PI)))* Math.pow(Math.E, -0.5 * Math.pow((y-15.0)/0.5,2));
-                double cost = 1 + eX + eY;
-                if(maxPoint == null || maxVal < cost){
-                    maxPoint = new Point(x,y);
-                    maxVal = cost;
-                }
-                if(minPoint == null || minVal > cost){
-                    minPoint = new Point(x,y);
-                    minVal = cost;
-                }
-                for(int e = 0; e < node.adjacency.size(); e++){
-                    node.adjacency.get(e).cost = cost;
-                }
-            }
-        }
-        //System.out.println("Max Cost: " + maxVal + " at " + maxPoint);
-        //System.out.println("Min Cost: " + minVal + " at " + minPoint);
-    }*/
-
     private boolean isCriticalDiagonal(int neighbourIndex, Node currentNode) {
         int[] neighbour = NEIGHBOURS[neighbourIndex];
         if(neighbour[0] == 0 || neighbour[1] == 0){
@@ -110,23 +69,9 @@ public class AStar {
         return nodes[currentNode.pos[0] + neighbour[0]][currentNode.pos[1] + neighbour[1]] == null;
     }
 
-    AStar(){
-        n0.adjacency.add(new Edge(n1,1));
-        n0.adjacency.add(new Edge(n2,1));
-        n1.adjacency.add(new Edge(n4,1));
-        n1.adjacency.add(new Edge(n3,1));
-        n2.adjacency.add(new Edge(n3,1));
-        n2.adjacency.add(new Edge(n5,1));
-        n3.adjacency.add(new Edge(n6,1));
-        n6.adjacency.add(new Edge(n8,1));
-        n5.adjacency.add(new Edge(n7,1));
-        //System.out.println(Arrays.toString(AStarSearch(n3, n8)));
-
-    }
-
-    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY) {
+    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, boolean avoidCenter) {
         resetGraph();
-        List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY]);
+        List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter);
         int[][] path = new int[nodePath.size()][2];
 
         for(int i = 0; i < nodePath.size(); i++){
@@ -147,7 +92,7 @@ public class AStar {
         }
     }
 
-    public List<Node> AStarSearch(Node start, Node target) {
+    public List<Node> AStarSearch(Node start, Node target, boolean avoidCenter) {
         if(start == null){
             System.out.println("Something went wrong. Start node was null.");
         }
@@ -189,7 +134,10 @@ public class AStar {
                 boolean isOpen = open.contains(neighourNode);
                 boolean isClosed = closed.contains(neighourNode);
 
-                double cost = edge.cost;
+                double cost = edge.cost + edge.avoidOwnField_cost;
+                if(avoidCenter){
+                    cost += edge.avoidCenter_cost;
+                }
 
                 double new_g_cost = current.g_cost + cost;
                 double new_f_cost = neighourNode.h_cost + new_g_cost;
@@ -228,7 +176,25 @@ public class AStar {
         return path;
     }
 
-    public static void main(String[] args) {
-        new AStar();
+
+
+    public void updateOwnFieldAvoidence(Point[][] board, int ownTeamCode) {
+        for(int x = 0; x < nodes.length; x++){
+            for(int y = 0; y < nodes[x].length; y++){
+                Node node = nodes[x][y];
+                if(node == null){
+                    continue;
+                }
+                for(int e = 0; e < node.adjacency.size(); e++){
+                    Edge edge = node.adjacency.get(e);
+                    if(board[edge.target.pos[0]][edge.target.pos[1]].statusCode == ownTeamCode){
+                        edge.avoidOwnField_cost = 4;
+                    } else {
+                        edge.avoidOwnField_cost = 0;
+                    }
+                }
+            }
+        }
     }
+
 }

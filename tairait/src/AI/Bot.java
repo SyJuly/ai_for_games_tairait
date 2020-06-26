@@ -2,14 +2,17 @@ package AI;
 
 import Board.Point;
 import Board.Team;
+import PathFinding.AStar;
+
+import java.util.List;
 
 public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
 
     public float speed;
     public int botCode;
-    private float x;
-    private float y;
+    protected float x;
+    protected float y;
 
     private float lastX;
     private float lastY;
@@ -82,7 +85,9 @@ public abstract class Bot {
         setDirection();
     }
 
-    public abstract void findNextPath(Point[][] board, Team[] teams);
+    public abstract void findNextPath(Clusterer clusterer,
+                                      AStar pathFinder,
+                                      List<Point> allFreePoints);
 
     public float[] getCurrentDirection() {
         return currentDirection;

@@ -79,6 +79,12 @@ public class Clusterer {
         List<Point> neighboursOfPoints = new ArrayList<>();
         for(int n = 0; n < AStar.NEIGHBOURS.length; n++){
             int neighbour[] = AStar.NEIGHBOURS[n];
+            int neighbourX =point.x + neighbour[0];
+            int neighbourY =point.y + neighbour[1];
+            if((neighbourX > boardManager.WORLD_SIZE - 1 || neighbourX < 0)||
+               (neighbourY > boardManager.WORLD_SIZE - 1 || neighbourY < 0)){
+            continue;
+            }
             Point neighourPoint = boardManager.getBoard()[point.x + neighbour[0]][point.y + neighbour[1]];
             if(points.contains(neighourPoint)){
                 neighboursOfPoints.add(neighourPoint);
