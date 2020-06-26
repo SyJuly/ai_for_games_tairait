@@ -30,8 +30,8 @@ public class BotManager {
             int gridX = (int)bots[i].getX();
             int gridY = (int)bots[i].getY();
 
-            int targetX = 10;
-            int targetY = 10;
+            int targetX = 16;
+            int targetY = 4;
             Point[][] board = boardManager.getBoard();
             while(board[targetX][targetY].statusCode < 0){
                 targetX++;

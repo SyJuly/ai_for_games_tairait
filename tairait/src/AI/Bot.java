@@ -30,7 +30,6 @@ public abstract class Bot {
         updateCurrentDirection();
     }
 
-
     private void updateCurrentDirection() {
         if(path == null){
             currentDirection = WAIT_DIRECTION;
@@ -50,10 +49,14 @@ public abstract class Bot {
             this.lastX = x;
             this.lastY = y;
         }
+
         setDirection();
     }
 
     private boolean hasSteppedOnTarget(int[] currentTarget){
+        if((currentTarget[0] == (int)x && currentTarget[1] == (int)y)){
+            return true;
+        }
         if((currentDirection[0] >= 0 && currentTarget[0] >= lastX && currentTarget[0] <= x)
         || (currentDirection[0] < 0 && currentTarget[0] <= lastX && currentTarget[0] >= x)){
             float u = (currentTarget[0] - x)/currentDirection[0];
@@ -67,7 +70,9 @@ public abstract class Bot {
         int[] currentTarget = path[pathIndex];
         this.lastX = x;
         this.lastY = y;
-        currentDirection = new float[]{currentTarget[0] - x, currentTarget[1] - y};
+        float directionX = (currentTarget[0] +0.5f) - x;
+        float directionY = (currentTarget[1] +0.5f) - y;
+        currentDirection = new float[]{directionX, directionY};
     }
 
     public void setPath(int[][] path){
