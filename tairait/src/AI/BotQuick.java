@@ -20,6 +20,9 @@ public class BotQuick extends Bot {
 
 
         List<List<Point>> clusters = clusterer.cluster(allFreePoints);
+        if(clusters.size() < 1){
+            //TODO
+        }
         List<Point> biggestCluster = clusters.get(0);
         for(int i = 1; i < clusters.size(); i++){
             if(clusters.get(i).size() > biggestCluster.size()){

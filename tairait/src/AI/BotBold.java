@@ -19,6 +19,9 @@ public class BotBold extends Bot {
     @Override
     public void findNextPath(Clusterer clusterer, AStar pathFinder, List<Point> bestEnemiesPoints) {
         List<List<Point>> clusters = clusterer.cluster(bestEnemiesPoints);
+        if(clusters.size() < 1){
+            //TODO
+        }
         List<Point> biggestCluster = clusters.get(0);
         for(int i = 1; i < clusters.size(); i++){
             if(clusters.get(i).size() > biggestCluster.size()){

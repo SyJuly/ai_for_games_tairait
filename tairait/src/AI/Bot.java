@@ -7,7 +7,7 @@ import PathFinding.AStar;
 import java.util.List;
 
 public abstract class Bot {
-    private final float[] WAIT_DIRECTION = new float[]{0,0};
+    private final float[] WAIT_DIRECTION = new float[]{1,1};
 
     public float speed;
     public int botCode;
