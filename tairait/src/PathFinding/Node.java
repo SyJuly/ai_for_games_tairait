@@ -15,8 +15,8 @@ public class Node{
         pos = new int[]{x,y};
     }
 
-    public void addNeighbour(Node neighbour, int cost) {
-        Edge edge = new Edge(neighbour, cost);
+    public void addNeighbour(Node neighbour, int cost, double avoidCenter_cost) {
+        Edge edge = new Edge(neighbour, cost, avoidCenter_cost);
         adjacency.add(edge);
     }
 

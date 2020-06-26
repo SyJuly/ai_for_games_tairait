@@ -29,6 +29,8 @@ public class AStar {
 
     private Node[][] nodes;
 
+    private double normalDistributionFactorA =(1.0/(0.5*Math.sqrt(2 * Math.PI)));
+
     public AStar(Point[][] world){
         nodes = new Node[world.length][world[0].length];
         for(int x = 0; x < world.length; x++){
@@ -43,19 +45,21 @@ public class AStar {
                 if(nodes[x][y] == null){
                     continue;
                 }
+                double eX = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((x-15.0)/0.5, 2));
+                double eY = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((y-15.0)/0.5,2));
+                double avoidCenter_cost = 1 + eX + eY;
                 for(int n = 0; n < NEIGHBOURS.length; n++){
                     int neighbour[] = NEIGHBOURS[n];
                     Node neighbourNode = nodes[x + neighbour[0]][y + neighbour[1]];
                     if(neighbourNode != null && !isCriticalDiagonal(n, nodes[x][y])){
-                        nodes[x][y].addNeighbour(neighbourNode,1);
+                        nodes[x][y].addNeighbour(neighbourNode,1, avoidCenter_cost);
                     }
                 }
             }
         }
-        overrideEdges_preferOuterSpace();
     }
 
-    public void overrideEdges_preferOuterSpace(){
+    /*public void overrideEdges_preferOuterSpace(){
         Point maxPoint = null;
         double maxVal = Double.NEGATIVE_INFINITY;
         double minVal = Double.POSITIVE_INFINITY;
@@ -84,7 +88,7 @@ public class AStar {
         }
         //System.out.println("Max Cost: " + maxVal + " at " + maxPoint);
         //System.out.println("Min Cost: " + minVal + " at " + minPoint);
-    }
+    }*/
 
     private boolean isCriticalDiagonal(int neighbourIndex, Node currentNode) {
         int[] neighbour = NEIGHBOURS[neighbourIndex];
