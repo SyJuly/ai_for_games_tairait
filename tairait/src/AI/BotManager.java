@@ -1,11 +1,10 @@
 package AI;
 
 import Board.BoardManager;
-import Board.Bot;
 import Board.Point;
 import PathFinding.AStar;
 
-public class MoveDirector {
+public class BotManager {
     private final int NUM_OF_BOTS = 3;
 
     private BoardManager boardManager;
@@ -14,14 +13,14 @@ public class MoveDirector {
     private int ownTeam = -1;
     private Bot[] bots = new Bot[NUM_OF_BOTS];
 
-    public MoveDirector(BoardManager boardManager){
+    public BotManager(BoardManager boardManager){
         this.boardManager = boardManager;
 
         pathFinder = new AStar(boardManager.getBoard());
         clusterer = new Clusterer(boardManager);
-        bots[0] = new Bot(1.1f, 0);
-        bots[1] = new Bot(1f, 1);
-        bots[2] = new Bot(0.67f, 2);
+        bots[0] = new BotQuick();
+        bots[1] = new BotNasty();
+        bots[2] = new BotBold();
 
 
     }

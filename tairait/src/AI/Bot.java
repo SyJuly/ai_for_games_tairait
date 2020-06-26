@@ -1,6 +1,9 @@
-package Board;
+package AI;
 
-public /*abstract*/ class Bot {
+import Board.Point;
+import Board.Team;
+
+public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
 
     public float speed;
@@ -36,7 +39,7 @@ public /*abstract*/ class Bot {
 
         int[] currentTarget = path[pathIndex];
         if(hasSteppedOnTarget(currentTarget)){
-            //System.out.println("Board.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
+            //System.out.println("AI.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
             pathIndex++;
             if(pathIndex > path.length - 1){
                 path = null;
@@ -74,7 +77,7 @@ public /*abstract*/ class Bot {
         setDirection();
     }
 
-    //public abstract void findNextPath(Point[][] board, Team[] teams);
+    public abstract void findNextPath(Point[][] board, Team[] teams);
 
     public float[] getCurrentDirection() {
         return currentDirection;

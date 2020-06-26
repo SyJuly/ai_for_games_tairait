@@ -1,6 +1,6 @@
 
 
-import AI.MoveDirector;
+import AI.BotManager;
 import Board.BoardManager;
 import lenz.htw.tiarait.ColorChange;
 import lenz.htw.tiarait.net.NetworkClient;
@@ -21,7 +21,7 @@ public class Client implements Runnable {
         NetworkClient nc =  new NetworkClient(null, name);
 
         boardManager.setObstacles(nc);
-        MoveDirector moveDirector = new MoveDirector(boardManager);
+        BotManager moveDirector = new BotManager(boardManager);
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
         System.out.println("Player:  " + name + "--- Team: " + nc.getMyPlayerNumber());
         long start = System.currentTimeMillis();
