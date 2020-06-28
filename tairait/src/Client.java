@@ -25,7 +25,6 @@ public class Client implements Runnable {
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
         System.out.println("Player:  " + name + "--- Team: " + nc.getMyPlayerNumber());
         long start = System.currentTimeMillis();
-        boolean setDirection = false;
         boolean printedCluster = false;
 
         while(nc.isAlive()){
@@ -35,9 +34,8 @@ public class Client implements Runnable {
                 moveDirector.updateBot(i, x, y);
             }
 
-            if(!setDirection){
+            if(moveDirector.isUpdateRequired()){
                 moveDirector.updateBotsTargets();
-                setDirection = true;
             }
             if(!printedCluster && System.currentTimeMillis() - start > 30000){
                 moveDirector.printCluster();

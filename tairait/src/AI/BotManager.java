@@ -30,8 +30,14 @@ public class BotManager {
     }
 
     public void updateBotsTargets(){
-        updateGraph();
-        bots[1].findNextPath(clusterer, pathFinder, getNonPossedPoints());
+        boolean graphHasBeenUpdated = false;
+        if(bots[1].arrivedAtTarget()){
+            if(!graphHasBeenUpdated){
+                updateGraph();
+                graphHasBeenUpdated = true;
+            }
+            bots[1].findNextPath(clusterer, pathFinder, getNonPossedPoints());
+        }
         bots[0].moveForward();
         bots[2].moveForward();
         //bots[1].findRandomPath(boardManager.getBoard(), pathFinder);
@@ -104,5 +110,14 @@ public class BotManager {
 
     public void updateBot(int botNr, float x, float y) {
         bots[botNr].updatePosition(x,y);
+    }
+
+    public boolean isUpdateRequired(){
+        for(Bot bot : bots){
+            if(bot.arrivedAtTarget()){
+                return true;
+            }
+        }
+        return false;
     }
 }

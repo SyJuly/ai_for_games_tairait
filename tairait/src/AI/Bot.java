@@ -112,6 +112,10 @@ public abstract class Bot {
                                       AStar pathFinder,
                                       List<Point> allFreePoints);
 
+    public boolean arrivedAtTarget(){
+        return path == null;
+    }
+
     public float[] getCurrentDirection() {
         return currentDirection;
     }
