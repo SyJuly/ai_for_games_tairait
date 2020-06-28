@@ -16,11 +16,15 @@ public class BotQuick extends Bot {
 
     @Override
     public void findNextPath(List<Point> allFreePoints) {
-
+        if(allFreePoints.size() < 1){
+            findRandomPath();
+            return;
+        }
 
         List<List<Point>> clusters = botManager.getClusterer().cluster(allFreePoints);
         if(clusters.size() < 1){
             findRandomPath();
+            return;
         }
         List<Point> biggestCluster = clusters.get(0);
         for(int i = 1; i < clusters.size(); i++){

@@ -20,9 +20,14 @@ public class BotBold extends Bot {
 
     @Override
     public void findNextPath(List<Point> bestEnemiesPoints) {
+        if(bestEnemiesPoints.size() < 1){
+            findRandomPath();
+            return;
+        }
         List<List<Point>> clusters = botManager.getClusterer().cluster(bestEnemiesPoints);
         if(clusters.size() < 1){
             findRandomPath();
+            return;
         }
         List<Point> biggestCluster = clusters.get(0);
         for(int i = 1; i < clusters.size(); i++){
@@ -32,7 +37,7 @@ public class BotBold extends Bot {
         }
         Collections.sort(biggestCluster, new NearestPointComparator(x,y));
         Point target = biggestCluster.get(biggestCluster.size() - 1);
-        System.out.println("Bold one targets: " + target + " from " + clusters.size() + " clusters.");
+        //System.out.println("Bold one targets: " + target + " from " + clusters.size() + " clusters.");
 
         int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false);
         if(path == null){

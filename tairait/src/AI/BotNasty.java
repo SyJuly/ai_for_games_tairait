@@ -21,9 +21,14 @@ public class BotNasty extends Bot {
 
     @Override
     public void findNextPath(List<Point> allEnemiesPoints) {
+        if(allEnemiesPoints.size() < 1){
+            findRandomPath();
+            return;
+        }
         List<List<Point>> clusters = botManager.getClusterer().cluster(allEnemiesPoints);
         if(clusters.size() < 1){
             findRandomPath();
+            return;
         }
         List<Point> nearestCluster = null;
         float minDistance = Float.POSITIVE_INFINITY;

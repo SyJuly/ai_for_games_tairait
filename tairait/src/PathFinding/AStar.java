@@ -164,11 +164,16 @@ public class AStar {
         }
         //System.out.println("Number of steps: " + numberOfSteps);
 
+        int pathLeadingOverOwnTeam = 0;
         List<Node> path = new ArrayList<>();
         Node next = target;
         while (!next.isPosition(start.pos)) {
             path.add(next);
 
+            Edge nextEdge = getEdge(next, next.parent);
+            if(nextEdge != null && nextEdge.avoidCenter_cost == 4){
+                pathLeadingOverOwnTeam++;
+            }
             next = next.parent;
             if(next == null){ // target was not reachable
                 return null;
@@ -176,10 +181,19 @@ public class AStar {
         }
         path.add(start);
         Collections.reverse(path);
+        //System.out.println("Times path leads over own point: " + pathLeadingOverOwnTeam);
         //System.out.println(Arrays.toString(path.toArray()));
         return path;
     }
 
+    private Edge getEdge(Node node1, Node node2) {
+        for(int i = 0; i < node1.adjacency.size(); i++){
+            if(node1.adjacency.get(i).target == node2){
+                return node1.adjacency.get(i);
+            }
+        }
+        return null;
+    }
 
 
     public void updatePreferenceCosts(Point[][] board, int ownTeamCode) {

@@ -48,7 +48,7 @@ public class BotManager {
                     updateGraph();
                     graphHasBeenUpdated = true;
                 }
-                bots[2].findNextPath(getNonPossedPoints());
+                bots[2].findNextPath(getBestTeamPoints());
             }
             bot.findRandomPath();
         }
