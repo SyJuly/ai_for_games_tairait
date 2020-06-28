@@ -39,10 +39,10 @@ public class Client implements Runnable {
             if(moveDirector.isUpdateRequired()){
                 moveDirector.updateBotsTargets();
             }
-            if(!printedCluster && System.currentTimeMillis() - start > 30000){
+            /*if(!printedCluster && System.currentTimeMillis() - start > 30000){
                 moveDirector.printCluster();
                 printedCluster = true;
-            }
+            }*/
 
             for(int i = 0; i < 3; i++){
                 float[] direction = moveDirector.getMoveDirection(i);

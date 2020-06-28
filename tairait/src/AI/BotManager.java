@@ -23,8 +23,8 @@ public class BotManager {
         this.isRandom = isRandom;
         pathFinder = new AStar(boardManager.getBoard());
         clusterer = new Clusterer(boardManager);
-        bots[0] = new BotQuick(this);
-        bots[1] = new BotNasty(this);
+        bots[1] = new BotQuick(this);
+        bots[0] = new BotNasty(this);
         bots[2] = new BotBold(this);
 
 
@@ -42,17 +42,19 @@ public class BotManager {
 
 
         boolean graphHasBeenUpdated = false;
-        for(Bot bot: bots) {
-            if (bot.arrivedAtTarget() && bot.botCode == 2) {
-                if (!graphHasBeenUpdated) {
-                    updateGraph();
-                    graphHasBeenUpdated = true;
-                }
-                bots[2].findNextPath(getBestTeamPoints());
+        if (bots[0].arrivedAtTarget()) {
+            if (!graphHasBeenUpdated) {
+                updateGraph();
+                graphHasBeenUpdated = true;
             }
-            bot.findRandomPath();
+            bots[0].findNextPath(getPossedPoints());
         }
-
+        if (bots[1].arrivedAtTarget()) {
+            bots[1].findRandomPath();
+        }
+        if (bots[2].arrivedAtTarget()) {
+            bots[2].findRandomPath();
+        }
 
         //bots[1].findNextPath(getPossedPoints());
         //bots[2].findNextPath(getBestTeamPoints());

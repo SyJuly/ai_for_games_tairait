@@ -5,6 +5,7 @@ import Board.Point;
 import Board.Team;
 import PathFinding.AStar;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -50,7 +51,7 @@ public abstract class Bot {
             if(pathIndex > path.length - 1){
                 path = null;
                 currentDirection = WAIT_DIRECTION;
-                if(botCode == 2){
+                if(botCode == 0){
                     System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
                 }
                 return;
@@ -85,6 +86,9 @@ public abstract class Bot {
     }
 
     public void setPath(int[][] path){
+        if(path != null && path.length < 2){
+            System.out.println("Invalid path: " + Arrays.toString(path[0]) + " to " + Arrays.toString(path[path.length-1]));
+        }
         this.path = path;
         this.pathIndex = 1;
         //System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
