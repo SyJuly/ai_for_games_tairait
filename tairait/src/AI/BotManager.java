@@ -15,11 +15,12 @@ public class BotManager {
     private AStar pathFinder;
     private Clusterer clusterer;
     private int ownTeam = -1;
+    private boolean isRandom;
     private Bot[] bots = new Bot[NUM_OF_BOTS];
 
-    public BotManager(BoardManager boardManager){
+    public BotManager(BoardManager boardManager, boolean isRandom){
         this.boardManager = boardManager;
-
+        this.isRandom = isRandom;
         pathFinder = new AStar(boardManager.getBoard());
         clusterer = new Clusterer(boardManager);
         bots[0] = new BotQuick();
@@ -30,6 +31,16 @@ public class BotManager {
     }
 
     public void updateBotsTargets(){
+        if(isRandom){
+            for(Bot bot : bots){
+                if(bot.arrivedAtTarget()){
+                    bot.findRandomPath(boardManager.getBoard(), pathFinder);
+                }
+            }
+            return;
+        }
+
+
         boolean graphHasBeenUpdated = false;
         if(bots[1].arrivedAtTarget()){
             if(!graphHasBeenUpdated){

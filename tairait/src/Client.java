@@ -9,9 +9,11 @@ import java.io.IOException;
 
 public class Client implements Runnable {
     private String name;
+    private boolean isRandom;
 
-    public Client(String name){
+    public Client(String name, boolean isRandom){
         this.name = name;
+        this.isRandom = isRandom;
     }
 
     @Override
@@ -21,7 +23,7 @@ public class Client implements Runnable {
         NetworkClient nc =  new NetworkClient(null, name);
 
         boardManager.setObstacles(nc);
-        BotManager moveDirector = new BotManager(boardManager);
+        BotManager moveDirector = new BotManager(boardManager, isRandom);
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
         System.out.println("Player:  " + name + "--- Team: " + nc.getMyPlayerNumber());
         long start = System.currentTimeMillis();
@@ -63,10 +65,10 @@ public class Client implements Runnable {
     //space starten
     public static void main(String[] args) throws IOException {
             //new Client("a").run();
-            new Thread(new Client("A")).start();
-            new Thread(new Client("B")).start();
-            new Thread(new Client("C")).start();
-            new Thread(new Client("D")).start();
+            new Thread(new Client("A", true)).start();
+            new Thread(new Client("B", true)).start();
+            new Thread(new Client("C", true)).start();
+            new Thread(new Client("D", true)).start();
 
     }
 }
