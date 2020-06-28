@@ -169,6 +169,9 @@ public class AStar {
                 System.out.println("Error: " + Arrays.toString(path.toArray()));
             }
             next = next.parent;
+            if(next == null){ // target was not reachable
+                return null;
+            }
         }
         path.add(start);
         Collections.reverse(path);

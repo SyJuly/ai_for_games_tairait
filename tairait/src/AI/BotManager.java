@@ -23,9 +23,9 @@ public class BotManager {
         this.isRandom = isRandom;
         pathFinder = new AStar(boardManager.getBoard());
         clusterer = new Clusterer(boardManager);
-        bots[0] = new BotQuick();
-        bots[1] = new BotNasty();
-        bots[2] = new BotBold();
+        bots[0] = new BotQuick(this);
+        bots[1] = new BotNasty(this);
+        bots[2] = new BotBold(this);
 
 
     }
@@ -34,7 +34,7 @@ public class BotManager {
         if(isRandom){
             for(Bot bot : bots){
                 if(bot.arrivedAtTarget()){
-                    bot.findRandomPath(boardManager.getBoard(), pathFinder);
+                    bot.findRandomPath();
                 }
             }
             return;
@@ -47,14 +47,12 @@ public class BotManager {
                 updateGraph();
                 graphHasBeenUpdated = true;
             }
-            bots[1].findNextPath(clusterer, pathFinder, getNonPossedPoints());
+            bots[1].findNextPath(getNonPossedPoints());
         }
         bots[0].moveForward();
         bots[2].moveForward();
-        //bots[1].findRandomPath(boardManager.getBoard(), pathFinder);
-        //bots[2].findRandomPath(boardManager.getBoard(), pathFinder);
-        //bots[1].findNextPath(clusterer, pathFinder, getPossedPoints());
-        //bots[2].findNextPath(clusterer, pathFinder, getBestTeamPoints());
+        //bots[1].findNextPath(getPossedPoints());
+        //bots[2].findNextPath(getBestTeamPoints());
     }
 
     private List<Point> getBestTeamPoints() {
@@ -130,5 +128,17 @@ public class BotManager {
             }
         }
         return false;
+    }
+
+    public Clusterer getClusterer() {
+        return clusterer;
+    }
+
+    public AStar getPathFinder(){
+        return pathFinder;
+    }
+
+    public boolean isBoardPointValid(int x, int y){
+        return boardManager.getBoard()[x][y].statusCode >= 0 && BoardManager.isInInnerRing(x, y);
     }
 }

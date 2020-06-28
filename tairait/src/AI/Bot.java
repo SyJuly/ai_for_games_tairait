@@ -11,6 +11,7 @@ import java.util.Random;
 public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
 
+    protected BotManager botManager;
     public float speed;
     public int botCode;
     protected float x;
@@ -24,7 +25,8 @@ public abstract class Bot {
     public float[] currentDirection = WAIT_DIRECTION;
 
 
-    public Bot(float speed, int botCode){
+    public Bot(BotManager botManager, float speed, int botCode){
+        this.botManager = botManager;
         this.speed = speed;
         this.botCode = botCode;
     }
@@ -87,7 +89,7 @@ public abstract class Bot {
         setDirection();
     }
 
-    public void findRandomPath(Point[][] board, AStar pathFinder){
+    public void findRandomPath(){
         Random random = new Random();
         boolean isValid = false;
         int randomX = 0;
@@ -95,12 +97,12 @@ public abstract class Bot {
         while(!isValid){
             randomX = random.nextInt(32);
             randomY = random.nextInt(32);
-            if(board[randomX][randomY].statusCode >= 0 && BoardManager.isInInnerRing(randomX, randomY)){
+            if(botManager.isBoardPointValid(randomX, randomY)){
                 isValid = true;
             }
         }
 
-        int[][] path = pathFinder.AStarSearch((int)x, (int)y, randomX, randomY, false);
+        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y, randomX, randomY, false);
         setPath(path);
     }
 
@@ -108,9 +110,7 @@ public abstract class Bot {
         currentDirection = new float[]{1,1};
     }
 
-    public abstract void findNextPath(Clusterer clusterer,
-                                      AStar pathFinder,
-                                      List<Point> allFreePoints);
+    public abstract void findNextPath(List<Point> points);
 
     public boolean arrivedAtTarget(){
         return path == null;

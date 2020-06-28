@@ -1,5 +1,6 @@
 package AI;
 
+import Board.BoardManager;
 import Board.Point;
 import Board.Team;
 import PathFinding.AStar;
@@ -9,17 +10,15 @@ import java.util.List;
 
 public class BotQuick extends Bot {
 
-    public BotQuick() {
-        super(1.1f, 1);
+    public BotQuick(BotManager botManager) {
+        super(botManager,1.1f, 1);
     }
 
     @Override
-    public void findNextPath(Clusterer clusterer,
-                             AStar pathFinder,
-                             List<Point> allFreePoints) {
+    public void findNextPath(List<Point> allFreePoints) {
 
 
-        List<List<Point>> clusters = clusterer.cluster(allFreePoints);
+        List<List<Point>> clusters = botManager.getClusterer().cluster(allFreePoints);
         if(clusters.size() < 1){
             //TODO
         }
@@ -33,7 +32,7 @@ public class BotQuick extends Bot {
         Point target = biggestCluster.get(biggestCluster.size() - 1);
 
 
-        int[][] path = pathFinder.AStarSearch((int)x, (int)y,target.x,target.y, true);
+        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, true);
         setPath(path);
     }
 

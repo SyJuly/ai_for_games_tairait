@@ -1,6 +1,7 @@
 package AI;
 
 import AI.Bot;
+import Board.BoardManager;
 import Board.Point;
 import Board.Team;
 import PathFinding.AStar;
@@ -13,16 +14,14 @@ public class BotNasty extends Bot {
 
     //Erease next enemy cluster and avoid own spaces
 
-    public BotNasty() {
-        super(1, 0);
+    public BotNasty(BotManager botManager) {
+        super(botManager,1, 0);
     }
 
 
     @Override
-    public void findNextPath(Clusterer clusterer,
-                             AStar pathFinder,
-                             List<Point> allEnemiesPoints) {
-        List<List<Point>> clusters = clusterer.cluster(allEnemiesPoints);
+    public void findNextPath(List<Point> allEnemiesPoints) {
+        List<List<Point>> clusters = botManager.getClusterer().cluster(allEnemiesPoints);
         if(clusters.size() < 1){
             //TODO
         }
@@ -44,7 +43,7 @@ public class BotNasty extends Bot {
         Collections.sort(nearestCluster, comparator);
         Point target = nearestCluster.get(nearestCluster.size() - 1);
 
-        int[][] path = pathFinder.AStarSearch((int)x, (int)y,target.x,target.y, false);
+        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false);
         setPath(path);
     }
 

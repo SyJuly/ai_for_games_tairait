@@ -1,5 +1,6 @@
 package AI;
 
+import Board.BoardManager;
 import Board.Point;
 import Board.Team;
 import PathFinding.AStar;
@@ -11,14 +12,14 @@ public class BotBold extends Bot {
 
     //overwrite best and avoid own
 
-    public BotBold() {
-        super(0.67f, 2);
+    public BotBold(BotManager botManager) {
+        super(botManager, 0.67f, 2);
     }
 
 
     @Override
-    public void findNextPath(Clusterer clusterer, AStar pathFinder, List<Point> bestEnemiesPoints) {
-        List<List<Point>> clusters = clusterer.cluster(bestEnemiesPoints);
+    public void findNextPath(List<Point> bestEnemiesPoints) {
+        List<List<Point>> clusters = botManager.getClusterer().cluster(bestEnemiesPoints);
         if(clusters.size() < 1){
             //TODO
         }
@@ -31,7 +32,11 @@ public class BotBold extends Bot {
         Collections.sort(biggestCluster, new NearestPointComparator(x,y));
         Point target = biggestCluster.get(biggestCluster.size() - 1);
 
-        int[][] path = pathFinder.AStarSearch((int)x, (int)y,target.x,target.y, false);
+        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false);
+        if(path == null){
+            findRandomPath();
+            return;
+        }
         setPath(path);
     }
 }
