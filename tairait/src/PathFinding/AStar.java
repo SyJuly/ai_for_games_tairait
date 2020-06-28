@@ -72,6 +72,9 @@ public class AStar {
     public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, boolean avoidCenter) {
         resetGraph();
         List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter);
+        if(nodePath == null){
+            return null;
+        }
         int[][] path = new int[nodePath.size()][2];
 
         for(int i = 0; i < nodePath.size(); i++){
@@ -95,9 +98,11 @@ public class AStar {
     public List<Node> AStarSearch(Node start, Node target, boolean avoidCenter) {
         if(start == null){
             System.out.println("Something went wrong. Start node was null.");
+            return null;
         }
         if(target == null){
-            System.out.println("Something went wrong. Target node was null.");
+            System.out.println("Something went wrong. Target node was null");
+            return null;
         }
 
         start.g_cost = 0;
@@ -157,17 +162,13 @@ public class AStar {
             }
             closed.add(current);
         }
-        System.out.println("Number of steps: " + numberOfSteps);
+        //System.out.println("Number of steps: " + numberOfSteps);
 
         List<Node> path = new ArrayList<>();
         Node next = target;
         while (!next.isPosition(start.pos)) {
             path.add(next);
 
-            if(next.parent == null){
-                System.out.println("Next was null");
-                System.out.println("Error: " + Arrays.toString(path.toArray()));
-            }
             next = next.parent;
             if(next == null){ // target was not reachable
                 return null;
@@ -175,7 +176,7 @@ public class AStar {
         }
         path.add(start);
         Collections.reverse(path);
-        System.out.println(Arrays.toString(path.toArray()));
+        //System.out.println(Arrays.toString(path.toArray()));
         return path;
     }
 

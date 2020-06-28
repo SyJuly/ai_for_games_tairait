@@ -23,7 +23,7 @@ public class BotNasty extends Bot {
     public void findNextPath(List<Point> allEnemiesPoints) {
         List<List<Point>> clusters = botManager.getClusterer().cluster(allEnemiesPoints);
         if(clusters.size() < 1){
-            //TODO
+            findRandomPath();
         }
         List<Point> nearestCluster = null;
         float minDistance = Float.POSITIVE_INFINITY;
@@ -44,6 +44,10 @@ public class BotNasty extends Bot {
         Point target = nearestCluster.get(nearestCluster.size() - 1);
 
         int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false);
+        if(path == null){
+            findRandomPath();
+            return;
+        }
         setPath(path);
     }
 

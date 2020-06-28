@@ -42,15 +42,18 @@ public class BotManager {
 
 
         boolean graphHasBeenUpdated = false;
-        if(bots[1].arrivedAtTarget()){
-            if(!graphHasBeenUpdated){
-                updateGraph();
-                graphHasBeenUpdated = true;
+        for(Bot bot: bots) {
+            if (bot.arrivedAtTarget() && bot.botCode == 2) {
+                if (!graphHasBeenUpdated) {
+                    updateGraph();
+                    graphHasBeenUpdated = true;
+                }
+                bots[2].findNextPath(getNonPossedPoints());
             }
-            bots[1].findNextPath(getNonPossedPoints());
+            bot.findRandomPath();
         }
-        bots[0].moveForward();
-        bots[2].moveForward();
+
+
         //bots[1].findNextPath(getPossedPoints());
         //bots[2].findNextPath(getBestTeamPoints());
     }

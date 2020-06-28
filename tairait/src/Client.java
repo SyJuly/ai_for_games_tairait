@@ -65,10 +65,10 @@ public class Client implements Runnable {
     //space starten
     public static void main(String[] args) throws IOException {
             //new Client("a").run();
-            new Thread(new Client("A", true)).start();
-            new Thread(new Client("B", true)).start();
-            new Thread(new Client("C", true)).start();
-            new Thread(new Client("D", true)).start();
+            new Thread(new Client("A", false)).start();
+            new Thread(new Client("B", false)).start();
+            new Thread(new Client("C", false)).start();
+            new Thread(new Client("D", false)).start();
 
     }
 }

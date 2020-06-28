@@ -5,6 +5,7 @@ import Board.Point;
 import Board.Team;
 import PathFinding.AStar;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class BotBold extends Bot {
     public void findNextPath(List<Point> bestEnemiesPoints) {
         List<List<Point>> clusters = botManager.getClusterer().cluster(bestEnemiesPoints);
         if(clusters.size() < 1){
-            //TODO
+            findRandomPath();
         }
         List<Point> biggestCluster = clusters.get(0);
         for(int i = 1; i < clusters.size(); i++){
@@ -31,6 +32,7 @@ public class BotBold extends Bot {
         }
         Collections.sort(biggestCluster, new NearestPointComparator(x,y));
         Point target = biggestCluster.get(biggestCluster.size() - 1);
+        System.out.println("Bold one targets: " + target + " from " + clusters.size() + " clusters.");
 
         int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false);
         if(path == null){

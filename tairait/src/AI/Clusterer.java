@@ -20,7 +20,6 @@ public class Clusterer {
     }
 
     public List<List<Point>> cluster(List<Point> points) {
-        System.out.println("Number of points: " + points.size());
         List<List<Point>> clusters = new ArrayList<>();
         Map<Point, Integer> visited = new HashMap<>();
 

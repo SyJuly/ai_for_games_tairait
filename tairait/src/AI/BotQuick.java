@@ -20,7 +20,7 @@ public class BotQuick extends Bot {
 
         List<List<Point>> clusters = botManager.getClusterer().cluster(allFreePoints);
         if(clusters.size() < 1){
-            //TODO
+            findRandomPath();
         }
         List<Point> biggestCluster = clusters.get(0);
         for(int i = 1; i < clusters.size(); i++){
@@ -33,6 +33,10 @@ public class BotQuick extends Bot {
 
 
         int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, true);
+        if(path == null){
+            findRandomPath();
+            return;
+        }
         setPath(path);
     }
 

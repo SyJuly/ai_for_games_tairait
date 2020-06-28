@@ -50,7 +50,9 @@ public abstract class Bot {
             if(pathIndex > path.length - 1){
                 path = null;
                 currentDirection = WAIT_DIRECTION;
-                System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
+                if(botCode == 2){
+                    System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
+                }
                 return;
             }
             this.lastX = x;
@@ -85,7 +87,7 @@ public abstract class Bot {
     public void setPath(int[][] path){
         this.path = path;
         this.pathIndex = 1;
-        System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
+        //System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
         setDirection();
     }
 
@@ -97,12 +99,16 @@ public abstract class Bot {
         while(!isValid){
             randomX = random.nextInt(32);
             randomY = random.nextInt(32);
-            if(botManager.isBoardPointValid(randomX, randomY)){
+            if(botManager.isBoardPointValid(randomX, randomY) && ((x != randomX) || (y != randomY))){
                 isValid = true;
             }
         }
 
         int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y, randomX, randomY, false);
+        if(path == null || path.length < 2){
+            findRandomPath();
+            return;
+        }
         setPath(path);
     }
 
