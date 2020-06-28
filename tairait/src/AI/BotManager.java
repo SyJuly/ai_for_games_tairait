@@ -89,7 +89,7 @@ public class BotManager {
     }
 
     public void updateGraph(){
-        pathFinder.updateOwnFieldAvoidence(boardManager.getBoard(), ownTeam + 1);
+        pathFinder.updatePreferenceCosts(boardManager.getBoard(), ownTeam + 1);
     }
 
     public void printCluster(){

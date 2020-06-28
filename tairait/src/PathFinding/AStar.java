@@ -16,7 +16,7 @@ public class AStar {
             {1, -1},
             {0,-1}};
 
-
+    private final static int DEFAULT_COST = 2;
     private Node[][] nodes;
 
     private double normalDistributionFactorA =(1.0/(0.5*Math.sqrt(2 * Math.PI)));
@@ -42,7 +42,7 @@ public class AStar {
                     int neighbour[] = NEIGHBOURS[n];
                     Node neighbourNode = nodes[x + neighbour[0]][y + neighbour[1]];
                     if(neighbourNode != null && !isCriticalDiagonal(n, nodes[x][y])){
-                        nodes[x][y].addNeighbour(neighbourNode,1, avoidCenter_cost);
+                        nodes[x][y].addNeighbour(neighbourNode,DEFAULT_COST, avoidCenter_cost);
                     }
                 }
             }
@@ -134,7 +134,7 @@ public class AStar {
                 boolean isOpen = open.contains(neighourNode);
                 boolean isClosed = closed.contains(neighourNode);
 
-                double cost = edge.cost + edge.avoidOwnField_cost;
+                double cost = edge.cost + edge.preference_cost;
                 if(avoidCenter){
                     cost += edge.avoidCenter_cost;
                 }
@@ -178,7 +178,7 @@ public class AStar {
 
 
 
-    public void updateOwnFieldAvoidence(Point[][] board, int ownTeamCode) {
+    public void updatePreferenceCosts(Point[][] board, int ownTeamCode) {
         for(int x = 0; x < nodes.length; x++){
             for(int y = 0; y < nodes[x].length; y++){
                 Node node = nodes[x][y];
@@ -187,10 +187,13 @@ public class AStar {
                 }
                 for(int e = 0; e < node.adjacency.size(); e++){
                     Edge edge = node.adjacency.get(e);
-                    if(board[edge.target.pos[0]][edge.target.pos[1]].statusCode == ownTeamCode){
-                        edge.avoidOwnField_cost = 4;
-                    } else {
-                        edge.avoidOwnField_cost = 0;
+                    int statusCode = board[edge.target.pos[0]][edge.target.pos[1]].statusCode;
+                    if(statusCode == ownTeamCode){
+                        edge.preference_cost = 4;
+                    } else if(statusCode > 0){
+                        edge.preference_cost = -1;
+                    } else if(statusCode == 0){
+                        edge.preference_cost = 0;
                     }
                 }
             }
