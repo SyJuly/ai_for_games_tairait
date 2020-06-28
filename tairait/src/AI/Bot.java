@@ -1,13 +1,15 @@
 package AI;
 
+import Board.BoardManager;
 import Board.Point;
 import Board.Team;
 import PathFinding.AStar;
 
 import java.util.List;
+import java.util.Random;
 
 public abstract class Bot {
-    private final float[] WAIT_DIRECTION = new float[]{1,1};
+    private final float[] WAIT_DIRECTION = new float[]{0,0};
 
     public float speed;
     public int botCode;
@@ -83,6 +85,27 @@ public abstract class Bot {
         this.pathIndex = 1;
         System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
         setDirection();
+    }
+
+    public void findRandomPath(Point[][] board, AStar pathFinder){
+        Random random = new Random();
+        boolean isValid = false;
+        int randomX = 0;
+        int randomY = 0;
+        while(!isValid){
+            randomX = random.nextInt(32);
+            randomY = random.nextInt(32);
+            if(board[randomX][randomY].statusCode >= 0 && BoardManager.isInInnerRing(randomX, randomY)){
+                isValid = true;
+            }
+        }
+
+        int[][] path = pathFinder.AStarSearch((int)x, (int)y, randomX, randomY, false);
+        setPath(path);
+    }
+
+    public void moveForward(){
+        currentDirection = new float[]{1,1};
     }
 
     public abstract void findNextPath(Clusterer clusterer,

@@ -31,9 +31,13 @@ public class BotManager {
 
     public void updateBotsTargets(){
         updateGraph();
-        bots[0].findNextPath(clusterer, pathFinder, getNonPossedPoints());
-        bots[1].findNextPath(clusterer, pathFinder, getPossedPoints());
-        bots[2].findNextPath(clusterer, pathFinder, getBestTeamPoints());
+        bots[1].findNextPath(clusterer, pathFinder, getNonPossedPoints());
+        bots[0].moveForward();
+        bots[2].moveForward();
+        //bots[1].findRandomPath(boardManager.getBoard(), pathFinder);
+        //bots[2].findRandomPath(boardManager.getBoard(), pathFinder);
+        //bots[1].findNextPath(clusterer, pathFinder, getPossedPoints());
+        //bots[2].findNextPath(clusterer, pathFinder, getBestTeamPoints());
     }
 
     private List<Point> getBestTeamPoints() {
@@ -67,7 +71,7 @@ public class BotManager {
         Point[][] board = boardManager.getBoard();
         for(int x = 0; x < board.length; x++){
             for(int y = 0; y < board[x].length; y++){
-                if(board[x][y].statusCode == 0){
+                if(board[x][y].statusCode == 0 && BoardManager.isInInnerRing(x,y)){
                     nonPossedPoints.add(board[x][y]);
                 }
             }

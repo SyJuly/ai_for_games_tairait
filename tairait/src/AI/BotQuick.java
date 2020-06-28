@@ -10,7 +10,7 @@ import java.util.List;
 public class BotQuick extends Bot {
 
     public BotQuick() {
-        super(1.1f, 0);
+        super(1.1f, 1);
     }
 
     @Override
@@ -31,6 +31,7 @@ public class BotQuick extends Bot {
         }
         Collections.sort(biggestCluster, new NearestPointComparator(x,y));
         Point target = biggestCluster.get(biggestCluster.size() - 1);
+
 
         int[][] path = pathFinder.AStarSearch((int)x, (int)y,target.x,target.y, true);
         setPath(path);

@@ -14,7 +14,7 @@ public class BotNasty extends Bot {
     //Erease next enemy cluster and avoid own spaces
 
     public BotNasty() {
-        super(1, 1);
+        super(1, 0);
     }
 
 

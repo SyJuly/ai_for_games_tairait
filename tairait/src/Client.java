@@ -35,7 +35,7 @@ public class Client implements Runnable {
                 moveDirector.updateBot(i, x, y);
             }
 
-            if(!setDirection && System.currentTimeMillis() - start > 5000){
+            if(!setDirection){
                 moveDirector.updateBotsTargets();
                 setDirection = true;
             }

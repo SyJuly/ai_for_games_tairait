@@ -54,6 +54,10 @@ public class BoardManager {
         }
     }
 
+    public static boolean isInInnerRing(int x, int y){
+        return (Math.sqrt(Math.pow(x-15, 2) + Math.pow(y-15,2)) < 14);
+    }
+
     public void printScore(){
         for(int i = 0; i < NUM_OF_PLAYERS; i++){
             System.out.print("Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints() + " | ");
