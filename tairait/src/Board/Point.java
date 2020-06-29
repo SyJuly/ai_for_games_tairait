@@ -14,4 +14,8 @@ public class Point {
     public String toString(){
         return "P(" + x + "," + y + "|" + statusCode + ")";
     }
+
+    public boolean isPoint(int xCoord, int yCoord){
+        return x == xCoord && y == yCoord;
+    }
 }

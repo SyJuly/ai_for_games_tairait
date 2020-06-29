@@ -25,15 +25,13 @@ public class BotNasty extends Bot {
         Comparator<Point> comparator = new NearestPointComparator(x, y);
 
         if(allEnemiesPoints.size() < 1){
-            System.out.println("Nasty bot does nothing.");
             return;
         }
         List<List<Point>> clusters = botManager.getClusterer().cluster(allEnemiesPoints);
         Point target;
+
         if(clusters.size() < 1){
-            System.out.println("Nasty bot found no clusters. Number of possessed points: " + Arrays.toString(allEnemiesPoints.toArray()));
-            Collections.sort(allEnemiesPoints, comparator);
-            target = allEnemiesPoints.get(0);
+            target = getClosestTarget(allEnemiesPoints, comparator);
         } else {
             List<Point> nearestCluster = null;
             float minDistance = Float.POSITIVE_INFINITY;
@@ -51,12 +49,18 @@ public class BotNasty extends Bot {
 
 
             Collections.sort(nearestCluster, comparator);
+            //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
             target = nearestCluster.get(nearestCluster.size() - 1);
+            if(target.isPoint((int)x,(int)y)){
+                findRandomPath();
+            }
         }
 
         int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false);
         if(path != null && path.length < 2){
             System.out.println("Nasty bot did somethin wrong. Path from: " + (int)x +","+ (int)y + " to " +target);
+            findRandomPath();
+            return;
         }
         if(path == null){
             System.out.println("Nasty bot does somthing random, because no path was found.");
@@ -64,6 +68,15 @@ public class BotNasty extends Bot {
             return;
         }
         setPath(path);
+    }
+
+    private Point getClosestTarget(List<Point> points, Comparator<Point> comparator){
+        int targetIndex = 0;
+        Collections.sort(points, comparator);
+        if(points.get(targetIndex).isPoint((int)x,(int)y)){
+            targetIndex++;
+        }
+        return points.get(1);
     }
 
 }

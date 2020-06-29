@@ -80,8 +80,13 @@ public class BotManager {
         for(Team team : teams){
             possedPoints.addAll(team.getPoints());
         }
+        for(Point point: possedPoints){
+            if(boardManager.getBoard()[point.x][point.y].statusCode == -1){
+                System.out.println("Found invalid point in possesed points via board.");
+            }
+        }
         if(possedPoints.size() == 0){
-            System.out.println("Something went wrong. Could not find no possed points.");
+            //System.out.println("Something went wrong. Could not find no possed points.");
         }
         return possedPoints;
     }

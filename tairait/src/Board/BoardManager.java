@@ -40,7 +40,7 @@ public class BoardManager {
     }
 
     public void updateBoard(int x, int y, int code) {
-        Point point = board[y][x];
+        Point point = board[x][y];
         int prevCode = point.statusCode;
         point.statusCode = code;
         if(code == prevCode){

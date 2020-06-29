@@ -218,4 +218,10 @@ public class AStar {
         }
     }
 
+    private Node getNode(int x, int y){
+        if(nodes[x][y] == null){
+            System.out.println("Node was null: " + x + "," + y);
+        }
+        return nodes[x][y];
+    }
 }
