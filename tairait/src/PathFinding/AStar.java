@@ -17,7 +17,7 @@ public class AStar {
             {0,-1}};
 
     private final static int DEFAULT_COST = 4;
-    private final static int OWNER_COST = 8;
+    private final static int OWNER_COST = 20;
     private final static int ENEMY_COST = -3;
     private Node[][] nodes;
     private int ownTeamCode;

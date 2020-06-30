@@ -9,7 +9,7 @@ public class BotManagerClusterAssistent implements Runnable {
 
     private BoardManager boardManager;
     private Clusterer clusterer;
-    private List<List<Point>> possessedPointClusters;
+    private List<List<Point>> enemyPossessedPointClusters;
     private List<List<Point>> nonPossessedPointClusters;
 
     public BotManagerClusterAssistent(BoardManager boardManager){
@@ -20,16 +20,16 @@ public class BotManagerClusterAssistent implements Runnable {
     @Override
     public void run() {
         while(true){
-            possessedPointClusters = clusterer.cluster(boardManager.getPossessedPoints());
+            enemyPossessedPointClusters = clusterer.cluster(boardManager.getEnemyPossessedPoints());
             nonPossessedPointClusters = clusterer.cluster(boardManager.getNonPossessedPoints());
         }
     }
 
-    public List<List<Point>> getPossessedPointClusters(){
-        return possessedPointClusters;
-    }
-
     public List<List<Point>> getNonPossessedPointClusters(){
         return nonPossessedPointClusters;
+    }
+
+    public List<List<Point>> getEnemyPossessedPointClusters() {
+        return enemyPossessedPointClusters;
     }
 }

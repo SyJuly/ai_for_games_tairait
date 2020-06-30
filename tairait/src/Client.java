@@ -23,7 +23,8 @@ public class Client implements Runnable {
         NetworkClient nc =  new NetworkClient(null, name);
 
         boardManager.setObstacles(nc);
-        BotManager moveDirector = new BotManager(boardManager, isRandom);
+        BotManager moveDirector = new BotManager(boardManager, isRandom, nc);
+        boardManager.setOwnTeam(nc.getMyPlayerNumber());
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
         System.out.println("Player:  " + name + "--- Team: " + nc.getMyPlayerNumber());
         long start = System.currentTimeMillis();

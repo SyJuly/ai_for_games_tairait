@@ -38,7 +38,7 @@ public class BotManagerUpdateAssistent implements Runnable {
 
 
         if(bots[0].arrivedAtTarget()){
-            bots[0].findNextPath(boardManager.getPossessedPoints());
+            bots[0].findNextPath(boardManager.getEnemyPossessedPoints());
             System.out.println("Changed path of Bot 0");
         }
         if(bots[1].arrivedAtTarget()){
@@ -46,7 +46,7 @@ public class BotManagerUpdateAssistent implements Runnable {
             System.out.println("Changed path of Bot 1");
         }
         if(bots[2].arrivedAtTarget()){
-            bots[2].findNextPath(boardManager.getPossessedPoints());
+            bots[2].findNextPath(boardManager.getEnemyPossessedPoints());
             System.out.println("Changed path of Bot 2");
         }
 

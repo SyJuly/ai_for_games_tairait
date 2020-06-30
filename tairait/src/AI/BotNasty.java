@@ -18,7 +18,7 @@ public class BotNasty extends Bot {
         if(allEnemiesPoints.size() < 1){
             return;
         }
-        List<List<Point>> clusters = clusterAssistent.getPossessedPointClusters();
+        List<List<Point>> clusters = clusterAssistent.getEnemyPossessedPointClusters();
         Point target;
 
         if(clusters.size() < 1){

@@ -19,9 +19,10 @@ public class BoardManager {
          4 = team 3
      */
     private Point[][] board = new Point[WORLD_SIZE][WORLD_SIZE];
-    private List<Point> possessedPoints = new ArrayList<>();
+    private List<Point> enemyPossessedPoints = new ArrayList<>();
     private List<Point> nonPossessedPoints = new ArrayList<>();
     private Team[] teams = new Team[NUM_OF_PLAYERS];
+    private int ownTeam;
 
     public BoardManager(){
         for(int i = 0; i < NUM_OF_PLAYERS; i++){
@@ -54,7 +55,9 @@ public class BoardManager {
         if (code > 0) {
             teams[code - 1].addPoint(point);
             if(prevCode == 0){
-                possessedPoints.add(point);
+                if(code != (ownTeam + 1)){
+                    enemyPossessedPoints.add(point);
+                }
                 nonPossessedPoints.remove(point);
             }
         }
@@ -63,13 +66,21 @@ public class BoardManager {
 
         }
         if(code == 0){
-            possessedPoints.remove(point);
+            enemyPossessedPoints.remove(point);
             nonPossessedPoints.add(point);
         }
     }
 
     public static boolean isInInnerRing(int x, int y){
         return (Math.sqrt(Math.pow(x-15, 2) + Math.pow(y-15,2)) < 14);
+    }
+
+    public List<Point> getOwnedPoints(){
+        return teams[ownTeam].getPoints();
+    }
+
+    public void setOwnTeam(int ownTeam){
+        this.ownTeam = ownTeam;
     }
 
     public void printScore(){
@@ -87,8 +98,8 @@ public class BoardManager {
         return teams;
     }
 
-    public List<Point> getPossessedPoints(){
-        return possessedPoints;
+    public List<Point> getEnemyPossessedPoints(){
+        return enemyPossessedPoints;
     }
     public List<Point> getNonPossessedPoints(){
         return nonPossessedPoints;
