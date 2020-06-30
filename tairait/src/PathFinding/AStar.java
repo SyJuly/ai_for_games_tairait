@@ -190,7 +190,7 @@ public class AStar {
         }
         path.add(start);
         Collections.reverse(path);
-        System.out.println("Times path leads over own point: " + pathLeadingOverOwnTeam);
+        //System.out.println("Times path leads over own point: " + pathLeadingOverOwnTeam);
         //System.out.println(Arrays.toString(path.toArray()));
         return path;
     }
@@ -206,6 +206,7 @@ public class AStar {
 
 
     public void updatePreferenceCosts(Point[][] board, int ownTeamCode) {
+        //Set<Node> targets = new HashSet<>();
         for(int x = 0; x < nodes.length; x++){
             for(int y = 0; y < nodes[x].length; y++){
                 Node node = nodes[x][y];
@@ -215,8 +216,10 @@ public class AStar {
                 for(int e = 0; e < node.adjacency.size(); e++){
                     Edge edge = node.adjacency.get(e);
                     int statusCode = board[edge.target.pos[0]][edge.target.pos[1]].statusCode;
+
                     if(statusCode == ownTeamCode){
                         edge.preference_cost = OWNER_COST;
+                        //targets.add(edge.target);
                     } else if(statusCode > 0){
                         edge.preference_cost = ENEMY_COST;
                     } else if(statusCode == 0){
@@ -225,6 +228,7 @@ public class AStar {
                 }
             }
         }
+        //System.out.println("AStar marked: " + targets.size() + " as owned.");
     }
 
     public void releasePredictedOwnership(int x, int y, int owner){

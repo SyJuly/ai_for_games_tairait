@@ -52,7 +52,7 @@ public class BotNasty extends Bot {
             //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
             target = nearestCluster.get(nearestCluster.size() - 1);
             if(target.isPoint((int)x,(int)y)){
-                findRandomPath();
+                return;
             }
         }
 
