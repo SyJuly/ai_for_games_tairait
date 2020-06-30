@@ -30,7 +30,6 @@ public class Clusterer {
             }
             List<Point> neighbours = getNeighbors(point, points);
             if (neighbours.size() >= minPts) {
-                // DBSCAN does not care about center points
                 List<Point> cluster = new ArrayList<>();
                 clusters.add(expandCluster(cluster, point, neighbours, points, visited));
             } else {

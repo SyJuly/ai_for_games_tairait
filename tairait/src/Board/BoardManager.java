@@ -148,4 +148,14 @@ public class BoardManager {
     public static final String BLUE = "\033[0;34m";    // BLUE
     public static final String WHITE = "\033[0;35m";   // WHITE
 
+    public List<List<Point>> getEnemyPossessedPointsDifferentiated() {
+        List<List<Point>> pointsOfEnemies = new ArrayList<>();
+        for(int i = 0; i < NUM_OF_PLAYERS; i++){
+            if(i == ownTeam){
+                continue;
+            }
+            pointsOfEnemies.add(teams[i].getPoints());
+        }
+        return pointsOfEnemies;
+    }
 }

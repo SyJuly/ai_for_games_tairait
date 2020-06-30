@@ -36,7 +36,6 @@ public class BotManagerUpdateAssistent implements Runnable {
             return;
         }
 
-
         if(bots[0].arrivedAtTarget()){
             bots[0].findNextPath(boardManager.getEnemyPossessedPoints());
             System.out.println("Changed path of Bot 0");

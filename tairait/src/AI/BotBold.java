@@ -20,7 +20,27 @@ public class BotBold extends Bot {
     @Override
     public void findNextPath(List<Point> enemiesPoints) {
         int[][] path;
-        float[][] botPositions = new float[4][2];
+
+        List<List<Point>> clusters = clusterAssistent.getTeamPointClusters();
+        Point target;
+
+        if(clusters.size() < 1){
+            target = getClosestTargetNotSelf(enemiesPoints);
+            if(enemiesPoints.size() < 1){
+             return;
+            }
+        } else {
+            List<Point> biggestCluster = getBiggestCluster(clusters);
+            //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
+            target = getTargetWithMaxDistance(biggestCluster);
+            if(target.isPoint((int)x,(int)y)){
+                return;
+            }
+        }
+
+        path = botManager.getPath((int)x, (int)y,target.x,target.y, botCode);
+
+        /*float[][] botPositions = new float[4][2];
         int nearestIndex = -1;
         float nearestDistance = Float.POSITIVE_INFINITY;
         for(int i = 0; i < 4; i++){
@@ -34,7 +54,7 @@ public class BotBold extends Bot {
                 nearestDistance = distance;
                 nearestIndex = i;
             }
-        }
+        }*
 
         if(nearestIndex == -1){
             List<List<Point>> clusters = clusterAssistent.getEnemyPossessedPointClusters();
@@ -47,7 +67,7 @@ public class BotBold extends Bot {
             path = botManager.getPath((int)x, (int)y,target.x,target.y, botCode);
         } else {
             path = botManager.getPath((int)x, (int)y,(int)botPositions[nearestIndex][0],(int)botPositions[nearestIndex][1], botCode);
-        }
+        }*/
 
 
         if(path == null){
