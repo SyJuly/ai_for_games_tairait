@@ -19,20 +19,15 @@ public class BotBold extends Bot {
 
 
     @Override
-    public void findNextPath(List<Point> bestEnemiesPoints) {
+    public void findNextPath(List<Point> enemiesPoints) {
         List<List<Point>> clusters = assistent.getPossessedPointClusters();
         if(clusters.size() < 1){
             findRandomPath();
             return;
         }
-        List<Point> biggestCluster = clusters.get(0);
-        for(int i = 1; i < clusters.size(); i++){
-            if(clusters.get(i).size() > biggestCluster.size()){
-                biggestCluster = clusters.get(i);
-            }
-        }
+        List<Point> biggestCluster = getBiggestCluster(clusters);
         Collections.sort(biggestCluster, new NearestPointComparator(x,y));
-        Point target = biggestCluster.get(biggestCluster.size() - 1);
+        Point target = getTargetWithMaxDistance(biggestCluster);
         //System.out.println("Bold one targets: " + target + " from " + clusters.size() + " clusters.");
 
         int[][] path = botManager.getPath((int)x, (int)y,target, botCode);

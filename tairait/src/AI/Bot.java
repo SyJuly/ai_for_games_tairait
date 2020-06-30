@@ -6,16 +6,19 @@ import Board.Team;
 import PathFinding.AStar;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
+    private final float MAX_TARGET_DISTANCE_PER_SECOND = Float.POSITIVE_INFINITY;
 
     protected BotManager botManager;
     protected BotManagerAssistent assistent;
     public float speed;
     public int botCode;
+    protected float maxTargetDistance;
     protected float x;
     protected float y;
 
@@ -32,6 +35,7 @@ public abstract class Bot {
         this.assistent = assistent;
         this.speed = speed;
         this.botCode = botCode;
+        this.maxTargetDistance = speed * MAX_TARGET_DISTANCE_PER_SECOND;
     }
 
     public void updatePosition(float x, float y){
@@ -117,6 +121,62 @@ public abstract class Bot {
             return;
         }
         setPath(path);
+    }
+
+
+    protected Point getTargetWithMaxDistance(List<Point> points){
+        float validMaxDistance = Float.NEGATIVE_INFINITY;
+        Point validMaxPoint = null;
+        for(int i = 0; i < points.size(); i++){
+            Point point = points.get(i);
+            float distance = (point.y - y) * (point.y - y) + (point.x - x) * (point.x - x);
+            if(validMaxPoint == null || (distance > validMaxDistance && distance <= maxTargetDistance)){
+                validMaxDistance = distance;
+                validMaxPoint = point;
+            }
+        }
+        return validMaxPoint;
+    }
+
+    protected Point getClosestTargetNotSelf(List<Point> points){
+        float validMinDistance = Float.POSITIVE_INFINITY;
+        Point validMinPoint = null;
+        for(int i = 0; i < points.size(); i++){
+            Point point = points.get(i);
+            float distance = (point.y - y) * (point.y - y) + (point.x - x) * (point.x - x);
+            if(validMinPoint == null || (distance < validMinDistance && !point.isPoint((int)x, (int)y))){
+                validMinDistance = distance;
+                validMinPoint = point;
+            }
+        }
+        return validMinPoint;
+    }
+
+    protected List<Point> getNearestCluster(List<List<Point>> clusters) {
+        List<Point> nearestCluster = null;
+        float minDistance = Float.POSITIVE_INFINITY;
+        for (int i = 0; i < clusters.size(); i++) {
+            List<Point> cluster = clusters.get(i);
+            for (int j = 0; j < cluster.size(); j++) {
+                Point p = cluster.get(j);
+                float distance = (p.y - y) * (p.y - y) + (p.x - x) * (p.x - x);
+                if (nearestCluster == null || distance < minDistance) {
+                    minDistance = distance;
+                    nearestCluster = cluster;
+                }
+            }
+        }
+        return nearestCluster;
+    }
+
+    protected List<Point> getBiggestCluster(List<List<Point>> clusters) {
+        List<Point> biggestCluster = clusters.get(0);
+        for(int i = 1; i < clusters.size(); i++){
+            if(clusters.get(i).size() > biggestCluster.size()){
+                biggestCluster = clusters.get(i);
+            }
+        }
+        return biggestCluster;
     }
 
     public void moveForward(){

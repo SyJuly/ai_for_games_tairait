@@ -26,14 +26,8 @@ public class BotQuick extends Bot {
             findRandomPath();
             return;
         }
-        List<Point> biggestCluster = clusters.get(0);
-        for(int i = 1; i < clusters.size(); i++){
-            if(clusters.get(i).size() > biggestCluster.size()){
-                biggestCluster = clusters.get(i);
-            }
-        }
-        Collections.sort(biggestCluster, new NearestPointComparator(x,y));
-        Point target = biggestCluster.get(biggestCluster.size() - 1);
+        List<Point> biggestCluster = getBiggestCluster(clusters);
+        Point target = getTargetWithMaxDistance(biggestCluster);
 
 
         int[][] path = botManager.getPath((int)x, (int)y,target, botCode);
@@ -43,6 +37,8 @@ public class BotQuick extends Bot {
         }
         setPath(path);
     }
+
+
 
 
     //Search free spaces away from other bots

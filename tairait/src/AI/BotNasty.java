@@ -22,8 +22,6 @@ public class BotNasty extends Bot {
 
     @Override
     public void findNextPath(List<Point> allEnemiesPoints) {
-        Comparator<Point> comparator = new NearestPointComparator(x, y);
-
         if(allEnemiesPoints.size() < 1){
             return;
         }
@@ -31,26 +29,11 @@ public class BotNasty extends Bot {
         Point target;
 
         if(clusters.size() < 1){
-            target = getClosestTarget(allEnemiesPoints, comparator);
+            target = getClosestTargetNotSelf(allEnemiesPoints);
         } else {
-            List<Point> nearestCluster = null;
-            float minDistance = Float.POSITIVE_INFINITY;
-            for (int i = 0; i < clusters.size(); i++) {
-                List<Point> cluster = clusters.get(i);
-                for (int j = 0; j < cluster.size(); j++) {
-                    Point p = cluster.get(j);
-                    float distance = (p.y - y) * (p.y - y) + (p.x - x) * (p.x - x);
-                    if (nearestCluster == null || distance < minDistance) {
-                        minDistance = distance;
-                        nearestCluster = cluster;
-                    }
-                }
-            }
-
-
-            Collections.sort(nearestCluster, comparator);
+            List<Point> nearestCluster = getNearestCluster(clusters);
             //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
-            target = nearestCluster.get(nearestCluster.size() - 1);
+            target = getTargetWithMaxDistance(nearestCluster);
             if(target.isPoint((int)x,(int)y)){
                 return;
             }
@@ -68,15 +51,6 @@ public class BotNasty extends Bot {
             return;
         }
         setPath(path);
-    }
-
-    private Point getClosestTarget(List<Point> points, Comparator<Point> comparator){
-        int targetIndex = 0;
-        Collections.sort(points, comparator);
-        if(points.get(targetIndex).isPoint((int)x,(int)y)){
-            targetIndex++;
-        }
-        return points.get(1);
     }
 
 }
