@@ -17,7 +17,7 @@ public class BotQuick extends Bot {
             return;
         }
 
-        List<List<Point>> clusters = assistent.getNonPossessedPointClusters();
+        List<List<Point>> clusters = clusterAssistent.getNonPossessedPointClusters();
         if(clusters.size() < 1){
             findRandomPath();
             return;

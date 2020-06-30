@@ -1,6 +1,7 @@
 package AI;
 
 import Board.Point;
+import PathFinding.AStar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,10 +9,10 @@ import java.util.Random;
 
 public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
-    private final float MAX_TARGET_DISTANCE_PER_SECOND = Float.POSITIVE_INFINITY;
+    private final float MAX_TARGET_DISTANCE_PER_SECOND = 6;
 
     protected BotManager botManager;
-    protected BotManagerClusterAssistent assistent;
+    protected BotManagerClusterAssistent clusterAssistent;
     public float speed;
     public int botCode;
     protected float maxTargetDistance;
@@ -26,9 +27,9 @@ public abstract class Bot {
     public float[] currentDirection = WAIT_DIRECTION;
 
 
-    public Bot(BotManager botManager, BotManagerClusterAssistent assistent, float speed, int botCode){
+    public Bot(BotManager botManager, BotManagerClusterAssistent clusterAssistent, float speed, int botCode){
         this.botManager = botManager;
-        this.assistent = assistent;
+        this.clusterAssistent = clusterAssistent;
         this.speed = speed;
         this.botCode = botCode;
         this.maxTargetDistance = speed * MAX_TARGET_DISTANCE_PER_SECOND;
@@ -41,7 +42,7 @@ public abstract class Bot {
     }
 
     private void updateCurrentDirection() {
-        if(path == null){
+        if(path == null || pathIndex < 0){
             currentDirection = WAIT_DIRECTION;
             return;
         }
@@ -50,7 +51,7 @@ public abstract class Bot {
         if(hasSteppedOnTarget(currentTarget)){
             //System.out.println("AI.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
             pathIndex++;
-            botManager.getPathFinder().releasePredictedOwnership(currentTarget[0], currentTarget[1], botCode);
+            //botManager.get.releasePredictedOwnership(currentTarget[0], currentTarget[1], botCode);
             if(pathIndex > path.length - 1){
                 path = null;
                 currentDirection = WAIT_DIRECTION;
@@ -92,8 +93,8 @@ public abstract class Bot {
         if(path != null && path.length < 2){
             System.out.println("Invalid path: " + Arrays.toString(path[0]) + " to " + Arrays.toString(path[path.length-1]));
         }
-        this.path = path;
         this.pathIndex = 1;
+        this.path = path;
         //System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
         setDirection();
     }

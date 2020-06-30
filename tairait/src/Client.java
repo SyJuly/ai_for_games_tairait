@@ -36,9 +36,6 @@ public class Client implements Runnable {
                 moveDirector.updateBot(i, x, y);
             }
 
-            if(moveDirector.isUpdateRequired()){
-                moveDirector.updateBotsTargets();
-            }
             /*if(!printed && System.currentTimeMillis() - start > 5000){
                 start = System.currentTimeMillis();
                 boardManager.printBoard(!isRandom);

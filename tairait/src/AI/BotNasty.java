@@ -18,7 +18,7 @@ public class BotNasty extends Bot {
         if(allEnemiesPoints.size() < 1){
             return;
         }
-        List<List<Point>> clusters = assistent.getPossessedPointClusters();
+        List<List<Point>> clusters = clusterAssistent.getPossessedPointClusters();
         Point target;
 
         if(clusters.size() < 1){
@@ -26,7 +26,7 @@ public class BotNasty extends Bot {
         } else {
             List<Point> nearestCluster = getNearestCluster(clusters);
             //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
-            target = getTargetWithMaxDistance(nearestCluster);
+            target = getClosestTargetNotSelf(nearestCluster);
             if(target.isPoint((int)x,(int)y)){
                 return;
             }

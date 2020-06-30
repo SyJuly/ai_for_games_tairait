@@ -7,47 +7,26 @@ import PathFinding.AStar;
 public class BotManager {
     private final int NUM_OF_BOTS = 3;
 
-    private BoardManager boardManager;
-    private BotManagerClusterAssistent botManagerAssistent;
     private AStar pathFinder;
+    private BoardManager boardManager;
+    private BotManagerClusterAssistent botManagerClusterAssistent;
+    private BotManagerUpdateAssistent botManagerUpdateAssistent;
     private int ownTeam = -1;
-    private boolean isRandom;
     private Bot[] bots = new Bot[NUM_OF_BOTS];
 
     public BotManager(BoardManager boardManager, boolean isRandom){
         this.boardManager = boardManager;
-        this.isRandom = isRandom;
-        botManagerAssistent = new BotManagerClusterAssistent(boardManager);
+        botManagerClusterAssistent = new BotManagerClusterAssistent(boardManager);
         pathFinder = new AStar(boardManager.getBoard());
+        bots[1] = new BotQuick(this, botManagerClusterAssistent);
+        bots[0] = new BotNasty(this, botManagerClusterAssistent);
+        bots[2] = new BotBold(this, botManagerClusterAssistent);
 
-        bots[1] = new BotQuick(this, botManagerAssistent);
-        bots[0] = new BotNasty(this, botManagerAssistent);
-        bots[2] = new BotBold(this, botManagerAssistent);
+        botManagerUpdateAssistent = new BotManagerUpdateAssistent(boardManager, isRandom, bots);
 
-        new Thread(botManagerAssistent).start();
+        new Thread(botManagerClusterAssistent).start();
+        new Thread(botManagerUpdateAssistent).start();
     }
-
-    private long lastUpdated = System.currentTimeMillis();
-
-    public void updateBotsTargets(){
-        if(isRandom){
-            for(Bot bot : bots){
-                if(bot.arrivedAtTarget()){
-                    bot.findRandomPath();
-                }
-            }
-            return;
-        }
-
-        bots[0].findNextPath(boardManager.getPossessedPoints());
-        bots[1].findNextPath(boardManager.getNonPossessedPoints());
-        bots[2].findNextPath(boardManager.getPossessedPoints());
-
-        System.out.println("Update every " + (System.currentTimeMillis() -lastUpdated) * 1.0/1000.0 + " seconds.");
-        lastUpdated = System.currentTimeMillis();
-
-    }
-
 
     public int[][] getPath(int startX, int startY, Point target, int botCode){
         boolean avoidCenter = botCode == 1 ? true: false;
@@ -61,7 +40,7 @@ public class BotManager {
 
     public void setTeam(int ownTeam){
         this.ownTeam = ownTeam;
-        this.pathFinder.setOwnTeamCode(ownTeam + 1);
+        pathFinder.setOwnTeamCode(ownTeam + 1);
     }
 
     public int getTeam(){
@@ -83,10 +62,6 @@ public class BotManager {
             }
         }
         return false;
-    }
-
-    public AStar getPathFinder(){
-        return pathFinder;
     }
 
     public boolean isBoardPointValid(int x, int y){
