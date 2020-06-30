@@ -56,7 +56,7 @@ public class BotNasty extends Bot {
             }
         }
 
-        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false);
+        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false, botCode);
         if(path != null && path.length < 2){
             System.out.println("Nasty bot did somethin wrong. Path from: " + (int)x +","+ (int)y + " to " +target);
             findRandomPath();

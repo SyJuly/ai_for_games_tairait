@@ -10,6 +10,7 @@ public class Node{
     public double g_cost = Integer.MAX_VALUE;
     public double f_cost = Integer.MAX_VALUE;
     public double h_cost;
+    public int markedAsToBeOwnedBy = -1;
 
     public Node(int x, int y){
         pos = new int[]{x,y};
@@ -28,11 +29,14 @@ public class Node{
         return pos[0] == position[0] && pos[1] == position[1];
     }
 
-    public void reset(){
+    public void reset(int owner){
         parent = null;
         g_cost = Integer.MAX_VALUE;
         f_cost = Integer.MAX_VALUE;
         h_cost = 0.0;
+        if(markedAsToBeOwnedBy == owner){
+            markedAsToBeOwnedBy = -1;
+        }
     }
 
 }

@@ -60,7 +60,7 @@ public class BoardManager {
 
     public void printScore(){
         for(int i = 0; i < NUM_OF_PLAYERS; i++){
-            System.out.print("Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints() + " | ");
+            System.out.print("Team " + teams[i].getTeamCode() + ": " + teams[i].getPoints().size() + " | ");
         }
         System.out.println();
     }
@@ -72,4 +72,47 @@ public class BoardManager {
     public Team[] getTeams() {
         return teams;
     }
+
+    public void printBoard(boolean print) {
+        if(!print){
+            return;
+        }
+        System.out.print("\n");
+        for(int y = board.length -1; y >= 0; y--){
+            for(int x = 0; x < board[y].length; x++){
+                if(board[x][y].statusCode == -1){
+                    System.out.print(BLACK + "X");
+                }
+                if(board[x][y].statusCode == 0){
+                    System.out.print(WHITE + "X");
+                }
+                if(board[x][y].statusCode == 1){
+                    System.out.print(RED + "X");
+                }
+                if(board[x][y].statusCode == 2){
+                    System.out.print(BLUE + "X");
+                }
+                if(board[x][y].statusCode == 3){
+                    System.out.print(YELLOW + "X");
+                }
+                if(board[x][y].statusCode == 4){
+                    System.out.print(GREEN + "X");
+                }
+                System.out.print("\033[0m");
+            }
+            System.out.print(BLACK+"\n");
+            System.out.print("\033[0m");
+
+        }
+        System.out.println();
+        printScore();
+        System.out.println();
+    }
+    public static final String BLACK = "\033[0;30m";   // BLACK
+    public static final String RED = "\033[0;31m";     // RED
+    public static final String GREEN = "\033[0;32m";   // GREEN
+    public static final String YELLOW = "\033[0;33m";  // YELLOW
+    public static final String BLUE = "\033[0;34m";    // BLUE
+    public static final String WHITE = "\033[0;35m";   // WHITE
+
 }

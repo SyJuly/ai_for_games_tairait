@@ -16,7 +16,9 @@ public class AStar {
             {1, -1},
             {0,-1}};
 
-    private final static int DEFAULT_COST = 2;
+    private final static int DEFAULT_COST = 4;
+    private final static int OWNER_COST = 8;
+    private final static int ENEMY_COST = -3;
     private Node[][] nodes;
 
     private double normalDistributionFactorA =(1.0/(0.5*Math.sqrt(2 * Math.PI)));
@@ -69,9 +71,9 @@ public class AStar {
         return nodes[currentNode.pos[0] + neighbour[0]][currentNode.pos[1] + neighbour[1]] == null;
     }
 
-    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, boolean avoidCenter) {
-        resetGraph();
-        List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter);
+    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, boolean avoidCenter, int owner) {
+        resetGraph(owner);
+        List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter, owner);
         if(nodePath == null){
             return null;
         }
@@ -84,18 +86,18 @@ public class AStar {
         return path;
     }
 
-    private void resetGraph() {
+    private void resetGraph(int owner) {
         for(int x = 0; x < nodes.length; x++){
             for(int y = 0; y < nodes[x].length; y++){
                 if(nodes[x][y] == null){
                     continue;
                 }
-                nodes[x][y].reset();
+                nodes[x][y].reset(owner);
             }
         }
     }
 
-    public List<Node> AStarSearch(Node start, Node target, boolean avoidCenter) {
+    public List<Node> AStarSearch(Node start, Node target, boolean avoidCenter, int owner) {
         if(start == null){
             System.out.println("Something went wrong. Start node was null.");
             return null;
@@ -143,6 +145,9 @@ public class AStar {
                 if(avoidCenter){
                     cost += edge.avoidCenter_cost;
                 }
+                if(neighourNode.markedAsToBeOwnedBy > 0){
+                    cost += OWNER_COST;
+                }
 
                 double new_g_cost = current.g_cost + cost;
                 double new_f_cost = neighourNode.h_cost + new_g_cost;
@@ -168,10 +173,14 @@ public class AStar {
         List<Node> path = new ArrayList<>();
         Node next = target;
         while (!next.isPosition(start.pos)) {
+            if(next.markedAsToBeOwnedBy > 0){
+                pathLeadingOverOwnTeam++;
+            }
+            next.markedAsToBeOwnedBy = owner;
             path.add(next);
 
             Edge nextEdge = getEdge(next, next.parent);
-            if(nextEdge != null && nextEdge.avoidCenter_cost == 4){
+            if(nextEdge != null && nextEdge.preference_cost == OWNER_COST){
                 pathLeadingOverOwnTeam++;
             }
             next = next.parent;
@@ -181,7 +190,7 @@ public class AStar {
         }
         path.add(start);
         Collections.reverse(path);
-        //System.out.println("Times path leads over own point: " + pathLeadingOverOwnTeam);
+        System.out.println("Times path leads over own point: " + pathLeadingOverOwnTeam);
         //System.out.println(Arrays.toString(path.toArray()));
         return path;
     }
@@ -207,14 +216,21 @@ public class AStar {
                     Edge edge = node.adjacency.get(e);
                     int statusCode = board[edge.target.pos[0]][edge.target.pos[1]].statusCode;
                     if(statusCode == ownTeamCode){
-                        edge.preference_cost = 4;
+                        edge.preference_cost = OWNER_COST;
                     } else if(statusCode > 0){
-                        edge.preference_cost = -1;
+                        edge.preference_cost = ENEMY_COST;
                     } else if(statusCode == 0){
                         edge.preference_cost = 0;
                     }
                 }
             }
+        }
+    }
+
+    public void releasePredictedOwnership(int x, int y, int owner){
+        Node node = nodes[x][y];
+        if(node.markedAsToBeOwnedBy == owner){
+            node.markedAsToBeOwnedBy = -1;
         }
     }
 

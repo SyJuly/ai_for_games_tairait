@@ -27,7 +27,7 @@ public class Client implements Runnable {
         moveDirector.setTeam(nc.getMyPlayerNumber()); //0 = rot, 1 = grün, 2=blau, 3=gelb
         System.out.println("Player:  " + name + "--- Team: " + nc.getMyPlayerNumber());
         long start = System.currentTimeMillis();
-        boolean printedCluster = false;
+        boolean printed = false;
 
         while(nc.isAlive()){
             for(int i = 0; i < 3; i++){
@@ -39,9 +39,10 @@ public class Client implements Runnable {
             if(moveDirector.isUpdateRequired()){
                 moveDirector.updateBotsTargets();
             }
-            /*if(!printedCluster && System.currentTimeMillis() - start > 30000){
-                moveDirector.printCluster();
-                printedCluster = true;
+            /*if(!printed && System.currentTimeMillis() - start > 5000){
+                start = System.currentTimeMillis();
+                boardManager.printBoard(!isRandom);
+                printed = false;
             }*/
 
             for(int i = 0; i < 3; i++){
@@ -66,9 +67,9 @@ public class Client implements Runnable {
     public static void main(String[] args) throws IOException {
             //new Client("a").run();
             new Thread(new Client("A", false)).start();
-            new Thread(new Client("B", false)).start();
-            new Thread(new Client("C", false)).start();
-            new Thread(new Client("D", false)).start();
+            new Thread(new Client("B", true)).start();
+            new Thread(new Client("C", true)).start();
+            new Thread(new Client("D", true)).start();
 
     }
 }

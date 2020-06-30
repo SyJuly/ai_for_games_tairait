@@ -48,11 +48,12 @@ public abstract class Bot {
         if(hasSteppedOnTarget(currentTarget)){
             //System.out.println("AI.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
             pathIndex++;
+            botManager.getPathFinder().releasePredictedOwnership(currentTarget[0], currentTarget[1], botCode);
             if(pathIndex > path.length - 1){
                 path = null;
                 currentDirection = WAIT_DIRECTION;
                 if(botCode == 0){
-                    System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
+                    //System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
                 }
                 return;
             }
@@ -108,7 +109,7 @@ public abstract class Bot {
             }
         }
 
-        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y, randomX, randomY, false);
+        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y, randomX, randomY, false, botCode);
         if(path == null || path.length < 2){
             findRandomPath();
             return;

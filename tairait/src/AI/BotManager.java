@@ -40,8 +40,12 @@ public class BotManager {
             return;
         }
 
+        updateGraph();
+        bots[0].findNextPath(getPossedPoints());
+        bots[1].findNextPath(getNonPossedPoints());
+        bots[2].findNextPath(getBestTeamPoints());
 
-        boolean graphHasBeenUpdated = false;
+        /*boolean graphHasBeenUpdated = false;
         if (bots[0].arrivedAtTarget()) {
             if (!graphHasBeenUpdated) {
                 updateGraph();
@@ -50,14 +54,20 @@ public class BotManager {
             bots[0].findNextPath(getPossedPoints());
         }
         if (bots[1].arrivedAtTarget()) {
-            bots[1].findRandomPath();
+            if (!graphHasBeenUpdated) {
+                updateGraph();
+                graphHasBeenUpdated = true;
+            }
+            bots[1].findNextPath(getNonPossedPoints());
         }
         if (bots[2].arrivedAtTarget()) {
-            bots[2].findRandomPath();
-        }
+            if (!graphHasBeenUpdated) {
+                updateGraph();
+                graphHasBeenUpdated = true;
+            }
+            bots[2].findNextPath(getBestTeamPoints());
+        }*/
 
-        //bots[1].findNextPath(getPossedPoints());
-        //bots[2].findNextPath(getBestTeamPoints());
     }
 
     private List<Point> getBestTeamPoints() {
@@ -69,7 +79,7 @@ public class BotManager {
             }
         }
         if(bestTeamPoints.size() == 0){
-            System.out.println("Something went wrong. Could not find no best team points.");
+            //System.out.println("Something went wrong. Could not find no best team points.");
         }
         return bestTeamPoints;
     }
@@ -79,11 +89,6 @@ public class BotManager {
         Team[] teams = boardManager.getTeams();
         for(Team team : teams){
             possedPoints.addAll(team.getPoints());
-        }
-        for(Point point: possedPoints){
-            if(boardManager.getBoard()[point.x][point.y].statusCode == -1){
-                System.out.println("Found invalid point in possesed points via board.");
-            }
         }
         if(possedPoints.size() == 0){
             //System.out.println("Something went wrong. Could not find no possed points.");

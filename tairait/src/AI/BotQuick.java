@@ -36,7 +36,7 @@ public class BotQuick extends Bot {
         Point target = biggestCluster.get(biggestCluster.size() - 1);
 
 
-        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, true);
+        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, true, botCode);
         if(path == null){
             findRandomPath();
             return;
