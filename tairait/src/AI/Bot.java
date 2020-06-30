@@ -1,12 +1,8 @@
 package AI;
 
-import Board.BoardManager;
 import Board.Point;
-import Board.Team;
-import PathFinding.AStar;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,7 +11,7 @@ public abstract class Bot {
     private final float MAX_TARGET_DISTANCE_PER_SECOND = Float.POSITIVE_INFINITY;
 
     protected BotManager botManager;
-    protected BotManagerAssistent assistent;
+    protected BotManagerClusterAssistent assistent;
     public float speed;
     public int botCode;
     protected float maxTargetDistance;
@@ -30,7 +26,7 @@ public abstract class Bot {
     public float[] currentDirection = WAIT_DIRECTION;
 
 
-    public Bot(BotManager botManager, BotManagerAssistent assistent, float speed, int botCode){
+    public Bot(BotManager botManager, BotManagerClusterAssistent assistent, float speed, int botCode){
         this.botManager = botManager;
         this.assistent = assistent;
         this.speed = speed;

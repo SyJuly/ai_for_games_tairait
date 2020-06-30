@@ -2,17 +2,13 @@ package AI;
 
 import Board.BoardManager;
 import Board.Point;
-import Board.Team;
 import PathFinding.AStar;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BotManager {
     private final int NUM_OF_BOTS = 3;
 
     private BoardManager boardManager;
-    private BotManagerAssistent botManagerAssistent;
+    private BotManagerClusterAssistent botManagerAssistent;
     private AStar pathFinder;
     private int ownTeam = -1;
     private boolean isRandom;
@@ -21,7 +17,7 @@ public class BotManager {
     public BotManager(BoardManager boardManager, boolean isRandom){
         this.boardManager = boardManager;
         this.isRandom = isRandom;
-        botManagerAssistent = new BotManagerAssistent(boardManager);
+        botManagerAssistent = new BotManagerClusterAssistent(boardManager);
         pathFinder = new AStar(boardManager.getBoard());
 
         bots[1] = new BotQuick(this, botManagerAssistent);

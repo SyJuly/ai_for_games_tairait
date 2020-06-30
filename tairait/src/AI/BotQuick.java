@@ -1,16 +1,12 @@
 package AI;
 
-import Board.BoardManager;
 import Board.Point;
-import Board.Team;
-import PathFinding.AStar;
 
-import java.util.Collections;
 import java.util.List;
 
 public class BotQuick extends Bot {
 
-    public BotQuick(BotManager botManager, BotManagerAssistent assistent) {
+    public BotQuick(BotManager botManager, BotManagerClusterAssistent assistent) {
         super(botManager, assistent,1.1f, 1);
     }
 

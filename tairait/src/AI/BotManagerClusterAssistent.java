@@ -5,14 +5,14 @@ import Board.Point;
 
 import java.util.List;
 
-public class BotManagerAssistent implements Runnable {
+public class BotManagerClusterAssistent implements Runnable {
 
     private BoardManager boardManager;
     private Clusterer clusterer;
     private List<List<Point>> possessedPointClusters;
     private List<List<Point>> nonPossessedPointClusters;
 
-    public BotManagerAssistent(BoardManager boardManager){
+    public BotManagerClusterAssistent(BoardManager boardManager){
         this.boardManager = boardManager;
         clusterer = new Clusterer(boardManager);
     }

@@ -1,11 +1,7 @@
 package AI;
 
-import Board.BoardManager;
 import Board.Point;
-import Board.Team;
-import PathFinding.AStar;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,7 +9,7 @@ public class BotBold extends Bot {
 
     //overwrite best and avoid own
 
-    public BotBold(BotManager botManager, BotManagerAssistent assistent) {
+    public BotBold(BotManager botManager, BotManagerClusterAssistent assistent) {
         super(botManager, assistent,0.67f, 2);
     }
 

@@ -1,21 +1,14 @@
 package AI;
 
-import AI.Bot;
-import Board.BoardManager;
 import Board.Point;
-import Board.Team;
-import PathFinding.AStar;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class BotNasty extends Bot {
 
     //Erease next enemy cluster and avoid own spaces
 
-    public BotNasty(BotManager botManager, BotManagerAssistent assistent) {
+    public BotNasty(BotManager botManager, BotManagerClusterAssistent assistent) {
         super(botManager, assistent,1, 0);
     }
 
