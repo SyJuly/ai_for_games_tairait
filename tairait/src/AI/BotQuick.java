@@ -12,21 +12,26 @@ public class BotQuick extends Bot {
 
     @Override
     public void findNextPath(List<Point> allFreePoints) {
-        if(allFreePoints.size() < 1){
-            findRandomPath();
+        if(arrivedAtTarget()) {
+            if (allFreePoints.size() < 1) {
+                findRandomPath();
+                return;
+            }
+
+            List<List<Point>> clusters = clusterAssistent.getNonPossessedPointClusters();
+            if (clusters.size() < 1) {
+                findRandomPath();
+                return;
+            }
+            List<Point> biggestCluster = getBiggestCluster(clusters);
+            currentTarget = getTargetWithMaxDistance(biggestCluster);
+        }
+
+        if(currentTarget == null){
             return;
         }
 
-        List<List<Point>> clusters = clusterAssistent.getNonPossessedPointClusters();
-        if(clusters.size() < 1){
-            findRandomPath();
-            return;
-        }
-        List<Point> biggestCluster = getBiggestCluster(clusters);
-        Point target = getTargetWithMaxDistance(biggestCluster);
-
-
-        int[][] path = botManager.getPath((int)x, (int)y,target, botCode);
+        int[][] path = botManager.getPath((int)x, (int)y,currentTarget, botCode);
         if(path == null){
             findRandomPath();
             return;

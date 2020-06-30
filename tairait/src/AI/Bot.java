@@ -9,7 +9,7 @@ import java.util.Random;
 
 public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
-    private final float MAX_TARGET_DISTANCE_PER_SECOND = 6;
+    private final float MAX_TARGET_DISTANCE_PER_SECOND = Float.POSITIVE_INFINITY;
 
     protected BotManager botManager;
     protected BotManagerClusterAssistent clusterAssistent;
@@ -22,9 +22,12 @@ public abstract class Bot {
     private float lastX;
     private float lastY;
 
-    private int[][] path;
-    private int pathIndex = -1;
+    protected int[][] path;
+    protected int pathIndex = -1;
     public float[] currentDirection = WAIT_DIRECTION;
+    protected Point currentTarget;
+
+    protected boolean isBlocked = false;
 
 
     public Bot(BotManager botManager, BotManagerClusterAssistent clusterAssistent, float speed, int botCode){
@@ -38,6 +41,9 @@ public abstract class Bot {
     public void updatePosition(float x, float y){
         this.x = x;
         this.y = y;
+        if(isBlocked){
+            return;
+        }
         updateCurrentDirection();
     }
 
@@ -52,7 +58,7 @@ public abstract class Bot {
             //System.out.println("AI.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
             pathIndex++;
             //botManager.get.releasePredictedOwnership(currentTarget[0], currentTarget[1], botCode);
-            if(pathIndex > path.length - 1){
+            if(pathIndex > path.length - 1 ){
                 path = null;
                 currentDirection = WAIT_DIRECTION;
                 if(botCode == 0){
@@ -90,13 +96,16 @@ public abstract class Bot {
     }
 
     public void setPath(int[][] path){
+        isBlocked = true;
         if(path != null && path.length < 2){
             System.out.println("Invalid path: " + Arrays.toString(path[0]) + " to " + Arrays.toString(path[path.length-1]));
+            return;
         }
         this.pathIndex = 1;
         this.path = path;
         //System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
         setDirection();
+        isBlocked = false;
     }
 
     public void findRandomPath(){
