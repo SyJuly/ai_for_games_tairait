@@ -13,18 +13,14 @@ public class BotBold extends Bot {
 
     //overwrite best and avoid own
 
-    public BotBold(BotManager botManager) {
-        super(botManager, 0.67f, 2);
+    public BotBold(BotManager botManager, BotManagerAssistent assistent) {
+        super(botManager, assistent,0.67f, 2);
     }
 
 
     @Override
     public void findNextPath(List<Point> bestEnemiesPoints) {
-        if(bestEnemiesPoints.size() < 1){
-            findRandomPath();
-            return;
-        }
-        List<List<Point>> clusters = botManager.getClusterer().cluster(bestEnemiesPoints);
+        List<List<Point>> clusters = assistent.getPossessedPointClusters();
         if(clusters.size() < 1){
             findRandomPath();
             return;

@@ -13,6 +13,7 @@ public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
 
     protected BotManager botManager;
+    protected BotManagerAssistent assistent;
     public float speed;
     public int botCode;
     protected float x;
@@ -26,8 +27,9 @@ public abstract class Bot {
     public float[] currentDirection = WAIT_DIRECTION;
 
 
-    public Bot(BotManager botManager, float speed, int botCode){
+    public Bot(BotManager botManager, BotManagerAssistent assistent, float speed, int botCode){
         this.botManager = botManager;
+        this.assistent = assistent;
         this.speed = speed;
         this.botCode = botCode;
     }

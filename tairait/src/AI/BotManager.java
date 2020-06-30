@@ -12,8 +12,8 @@ public class BotManager {
     private final int NUM_OF_BOTS = 3;
 
     private BoardManager boardManager;
+    private BotManagerAssistent botManagerAssistent;
     private AStar pathFinder;
-    private Clusterer clusterer;
     private int ownTeam = -1;
     private boolean isRandom;
     private Bot[] bots = new Bot[NUM_OF_BOTS];
@@ -21,13 +21,14 @@ public class BotManager {
     public BotManager(BoardManager boardManager, boolean isRandom){
         this.boardManager = boardManager;
         this.isRandom = isRandom;
+        botManagerAssistent = new BotManagerAssistent(boardManager);
         pathFinder = new AStar(boardManager.getBoard());
-        clusterer = new Clusterer(boardManager);
-        bots[1] = new BotQuick(this);
-        bots[0] = new BotNasty(this);
-        bots[2] = new BotBold(this);
 
+        bots[1] = new BotQuick(this, botManagerAssistent);
+        bots[0] = new BotNasty(this, botManagerAssistent);
+        bots[2] = new BotBold(this, botManagerAssistent);
 
+        new Thread(botManagerAssistent).start();
     }
 
     private long lastUpdated = System.currentTimeMillis();
@@ -48,28 +49,6 @@ public class BotManager {
 
         System.out.println("Update every " + (System.currentTimeMillis() -lastUpdated) * 1.0/1000.0 + " seconds.");
         lastUpdated = System.currentTimeMillis();
-        /*boolean graphHasBeenUpdated = false;
-        if (bots[0].arrivedAtTarget()) {
-            if (!graphHasBeenUpdated) {
-                updateGraph();
-                graphHasBeenUpdated = true;
-            }
-            bots[0].findNextPath(getPossedPoints());
-        }
-        if (bots[1].arrivedAtTarget()) {
-            if (!graphHasBeenUpdated) {
-                updateGraph();
-                graphHasBeenUpdated = true;
-            }
-            bots[1].findNextPath(getNonPossedPoints());
-        }
-        if (bots[2].arrivedAtTarget()) {
-            if (!graphHasBeenUpdated) {
-                updateGraph();
-                graphHasBeenUpdated = true;
-            }
-            bots[2].findNextPath(getBestTeamPoints());
-        }*/
 
     }
 
@@ -82,10 +61,6 @@ public class BotManager {
     public int[][] getPath(int startX, int startY, int targetX, int targetY, int botCode){
         boolean avoidCenter = botCode == 1 ? true: false;
         return pathFinder.AStarSearch(startX, startY,targetX,targetY, boardManager.getBoard(), avoidCenter, botCode);
-    }
-
-    public void printCluster(){
-        clusterer.printCluster(clusterer.cluster(boardManager.getTeams()[ownTeam].getPoints()));
     }
 
     public void setTeam(int ownTeam){
@@ -112,10 +87,6 @@ public class BotManager {
             }
         }
         return false;
-    }
-
-    public Clusterer getClusterer() {
-        return clusterer;
     }
 
     public AStar getPathFinder(){

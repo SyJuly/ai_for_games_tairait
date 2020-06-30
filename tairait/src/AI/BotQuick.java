@@ -10,8 +10,8 @@ import java.util.List;
 
 public class BotQuick extends Bot {
 
-    public BotQuick(BotManager botManager) {
-        super(botManager,1.1f, 1);
+    public BotQuick(BotManager botManager, BotManagerAssistent assistent) {
+        super(botManager, assistent,1.1f, 1);
     }
 
     @Override
@@ -21,7 +21,7 @@ public class BotQuick extends Bot {
             return;
         }
 
-        List<List<Point>> clusters = botManager.getClusterer().cluster(allFreePoints);
+        List<List<Point>> clusters = assistent.getNonPossessedPointClusters();
         if(clusters.size() < 1){
             findRandomPath();
             return;

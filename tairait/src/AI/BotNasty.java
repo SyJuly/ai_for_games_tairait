@@ -15,8 +15,8 @@ public class BotNasty extends Bot {
 
     //Erease next enemy cluster and avoid own spaces
 
-    public BotNasty(BotManager botManager) {
-        super(botManager,1, 0);
+    public BotNasty(BotManager botManager, BotManagerAssistent assistent) {
+        super(botManager, assistent,1, 0);
     }
 
 
@@ -27,7 +27,7 @@ public class BotNasty extends Bot {
         if(allEnemiesPoints.size() < 1){
             return;
         }
-        List<List<Point>> clusters = botManager.getClusterer().cluster(allEnemiesPoints);
+        List<List<Point>> clusters = assistent.getPossessedPointClusters();
         Point target;
 
         if(clusters.size() < 1){

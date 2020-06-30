@@ -23,7 +23,8 @@ public class Clusterer {
         List<List<Point>> clusters = new ArrayList<>();
         Map<Point, Integer> visited = new HashMap<>();
 
-        for (Point point : points) {
+        for (int i = 0; i < points.size(); i++) {
+            Point point = points.get(i);
             if (visited.containsKey(point)) {
                 continue;
             }
