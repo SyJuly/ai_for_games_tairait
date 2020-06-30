@@ -40,7 +40,6 @@ public class BotManager {
             return;
         }
 
-        updateGraph();
         bots[0].findNextPath(getPossedPoints());
         bots[1].findNextPath(getNonPossedPoints());
         bots[2].findNextPath(getBestTeamPoints());
@@ -112,8 +111,14 @@ public class BotManager {
         return nonPossedPoints;
     }
 
-    public void updateGraph(){
-        pathFinder.updatePreferenceCosts(boardManager.getBoard(), ownTeam + 1);
+    public int[][] getPath(int startX, int startY, Point target, int botCode){
+        boolean avoidCenter = botCode == 1 ? true: false;
+        return pathFinder.AStarSearch(startX, startY,target.x,target.y, boardManager.getBoard(), avoidCenter, botCode);
+    }
+
+    public int[][] getPath(int startX, int startY, int targetX, int targetY, int botCode){
+        boolean avoidCenter = botCode == 1 ? true: false;
+        return pathFinder.AStarSearch(startX, startY,targetX,targetY, boardManager.getBoard(), avoidCenter, botCode);
     }
 
     public void printCluster(){
@@ -122,6 +127,7 @@ public class BotManager {
 
     public void setTeam(int ownTeam){
         this.ownTeam = ownTeam;
+        this.pathFinder.setOwnTeamCode(ownTeam + 1);
     }
 
     public int getTeam(){

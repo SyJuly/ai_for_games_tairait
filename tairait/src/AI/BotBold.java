@@ -39,7 +39,7 @@ public class BotBold extends Bot {
         Point target = biggestCluster.get(biggestCluster.size() - 1);
         //System.out.println("Bold one targets: " + target + " from " + clusters.size() + " clusters.");
 
-        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y,target.x,target.y, false, botCode);
+        int[][] path = botManager.getPath((int)x, (int)y,target, botCode);
         if(path == null){
             findRandomPath();
             return;

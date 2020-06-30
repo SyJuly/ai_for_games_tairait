@@ -109,7 +109,7 @@ public abstract class Bot {
             }
         }
 
-        int[][] path = botManager.getPathFinder().AStarSearch((int)x, (int)y, randomX, randomY, false, botCode);
+        int[][] path = botManager.getPath((int)x, (int)y, randomX, randomY, botCode);
         if(path == null || path.length < 2){
             findRandomPath();
             return;

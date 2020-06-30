@@ -20,6 +20,7 @@ public class AStar {
     private final static int OWNER_COST = 8;
     private final static int ENEMY_COST = -3;
     private Node[][] nodes;
+    private int ownTeamCode;
 
     private double normalDistributionFactorA =(1.0/(0.5*Math.sqrt(2 * Math.PI)));
 
@@ -71,9 +72,9 @@ public class AStar {
         return nodes[currentNode.pos[0] + neighbour[0]][currentNode.pos[1] + neighbour[1]] == null;
     }
 
-    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, boolean avoidCenter, int owner) {
-        resetGraph(owner);
-        List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter, owner);
+    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, Point[][] board, boolean avoidCenter, int botCode) {
+        prepareGraph(board,ownTeamCode, botCode);
+        List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter, botCode);
         if(nodePath == null){
             return null;
         }
@@ -84,17 +85,6 @@ public class AStar {
             path[i] = new int[]{node.pos[0], node.pos[1]};
         }
         return path;
-    }
-
-    private void resetGraph(int owner) {
-        for(int x = 0; x < nodes.length; x++){
-            for(int y = 0; y < nodes[x].length; y++){
-                if(nodes[x][y] == null){
-                    continue;
-                }
-                nodes[x][y].reset(owner);
-            }
-        }
     }
 
     public List<Node> AStarSearch(Node start, Node target, boolean avoidCenter, int owner) {
@@ -205,7 +195,7 @@ public class AStar {
     }
 
 
-    public void updatePreferenceCosts(Point[][] board, int ownTeamCode) {
+    public void prepareGraph(Point[][] board, int ownTeamCode, int botOwner) {
         //Set<Node> targets = new HashSet<>();
         for(int x = 0; x < nodes.length; x++){
             for(int y = 0; y < nodes[x].length; y++){
@@ -213,6 +203,7 @@ public class AStar {
                 if(node == null){
                     continue;
                 }
+                nodes[x][y].reset(botOwner);
                 for(int e = 0; e < node.adjacency.size(); e++){
                     Edge edge = node.adjacency.get(e);
                     int statusCode = board[edge.target.pos[0]][edge.target.pos[1]].statusCode;
@@ -243,5 +234,9 @@ public class AStar {
             System.out.println("Node was null: " + x + "," + y);
         }
         return nodes[x][y];
+    }
+
+    public void setOwnTeamCode(int ownTeamCode){
+        this.ownTeamCode = ownTeamCode;
     }
 }
