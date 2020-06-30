@@ -30,6 +30,8 @@ public class BotManager {
 
     }
 
+    private long lastUpdated = System.currentTimeMillis();
+
     public void updateBotsTargets(){
         if(isRandom){
             for(Bot bot : bots){
@@ -40,10 +42,12 @@ public class BotManager {
             return;
         }
 
-        bots[0].findNextPath(getPossedPoints());
-        bots[1].findNextPath(getNonPossedPoints());
-        bots[2].findNextPath(getBestTeamPoints());
+        bots[0].findNextPath(boardManager.getPossessedPoints());
+        bots[1].findNextPath(boardManager.getNonPossessedPoints());
+        bots[2].findNextPath(boardManager.getPossessedPoints());
 
+        System.out.println("Update every " + (System.currentTimeMillis() -lastUpdated) * 1.0/1000.0 + " seconds.");
+        lastUpdated = System.currentTimeMillis();
         /*boolean graphHasBeenUpdated = false;
         if (bots[0].arrivedAtTarget()) {
             if (!graphHasBeenUpdated) {
@@ -69,47 +73,6 @@ public class BotManager {
 
     }
 
-    private List<Point> getBestTeamPoints() {
-        Team[] teams = boardManager.getTeams();
-        List<Point> bestTeamPoints = teams[0].getPoints();
-        for(int i = 1; i < teams.length; i++){
-            if(bestTeamPoints.size() < teams[i].getPoints().size()){
-                bestTeamPoints = teams[i].getPoints();
-            }
-        }
-        if(bestTeamPoints.size() == 0){
-            //System.out.println("Something went wrong. Could not find no best team points.");
-        }
-        return bestTeamPoints;
-    }
-
-    private List<Point> getPossedPoints() {
-        List<Point> possedPoints = new ArrayList<>();
-        Team[] teams = boardManager.getTeams();
-        for(Team team : teams){
-            possedPoints.addAll(team.getPoints());
-        }
-        if(possedPoints.size() == 0){
-            //System.out.println("Something went wrong. Could not find no possed points.");
-        }
-        return possedPoints;
-    }
-
-    private List<Point> getNonPossedPoints() {
-        List<Point> nonPossedPoints = new ArrayList<>();
-        Point[][] board = boardManager.getBoard();
-        for(int x = 0; x < board.length; x++){
-            for(int y = 0; y < board[x].length; y++){
-                if(board[x][y].statusCode == 0 && BoardManager.isInInnerRing(x,y)){
-                    nonPossedPoints.add(board[x][y]);
-                }
-            }
-        }
-        if(nonPossedPoints.size() == 0){
-            System.out.println("Something went wrong. Could not find no non-possed points.");
-        }
-        return nonPossedPoints;
-    }
 
     public int[][] getPath(int startX, int startY, Point target, int botCode){
         boolean avoidCenter = botCode == 1 ? true: false;

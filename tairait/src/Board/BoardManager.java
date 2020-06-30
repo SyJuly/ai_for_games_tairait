@@ -2,6 +2,9 @@ package Board;
 
 import lenz.htw.tiarait.net.NetworkClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoardManager {
 
     public final int NUM_OF_PLAYERS = 4;
@@ -16,6 +19,8 @@ public class BoardManager {
          4 = team 3
      */
     private Point[][] board = new Point[WORLD_SIZE][WORLD_SIZE];
+    private List<Point> possessedPoints = new ArrayList<>();
+    private List<Point> nonPossessedPoints = new ArrayList<>();
     private Team[] teams = new Team[NUM_OF_PLAYERS];
 
     public BoardManager(){
@@ -48,9 +53,18 @@ public class BoardManager {
         }
         if (code > 0) {
             teams[code - 1].addPoint(point);
+            if(prevCode == 0){
+                possessedPoints.add(point);
+                nonPossessedPoints.remove(point);
+            }
         }
         if (prevCode > 0) {
             teams[prevCode - 1].removePoint(point);
+
+        }
+        if(code == 0){
+            possessedPoints.remove(point);
+            nonPossessedPoints.add(point);
         }
     }
 
@@ -72,6 +86,14 @@ public class BoardManager {
     public Team[] getTeams() {
         return teams;
     }
+
+    public List<Point> getPossessedPoints(){
+        return possessedPoints;
+    }
+    public List<Point> getNonPossessedPoints(){
+        return nonPossessedPoints;
+    }
+
 
     public void printBoard(boolean print) {
         if(!print){
