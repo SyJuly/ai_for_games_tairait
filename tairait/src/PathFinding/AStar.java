@@ -190,11 +190,9 @@ public class AStar {
 
     private void markOwnership(int owner, Node next) {
         next.markedAsToBeOwnedBy = owner;
-        if(owner == 2){
-            for(Edge edge : next.adjacency){
-                if(edge.target.pos[0] == next.pos[0] || edge.target.pos[1] == next.pos[1]){
-                    next.markedAsToBeOwnedBy = owner;
-                }
+        for(Edge edge : next.adjacency){
+            if(edge.target.pos[0] == next.pos[0] || edge.target.pos[1] == next.pos[1]){
+                edge.target.markedAsToBeOwnedBy = owner;
             }
         }
     }

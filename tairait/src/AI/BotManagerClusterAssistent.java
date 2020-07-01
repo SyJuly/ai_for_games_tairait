@@ -48,4 +48,11 @@ public class BotManagerClusterAssistent implements Runnable {
     public List<List<Point>> getEnemyPossessedPointClusters() {
         return enemyPossessedPointClusters;
     }
+
+    public List<Point> getNonAndEnemyPossessedPoints(){
+        List<Point> points = new ArrayList<>();
+        points.addAll(boardManager.getEnemyPossessedPoints());
+        points.addAll(boardManager.getNonPossessedPoints());
+        return points;
+    }
 }
