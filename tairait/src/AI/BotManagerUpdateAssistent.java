@@ -36,26 +36,14 @@ public class BotManagerUpdateAssistent implements Runnable {
             return;
         }
 
-        bots[0].findNextPath(boardManager.getEnemyPossessedPoints());
-        bots[1].findNextPath(boardManager.getNonPossessedPoints());
-        bots[2].findNextPath(boardManager.getEnemyPossessedPoints());
+        bots[0].updateTarget(boardManager.getEnemyPossessedPoints());
+        bots[1].updateTarget(boardManager.getNonPossessedPoints());
+        bots[2].updateTarget(boardManager.getEnemyPossessedPoints());
 
-        /*
-        if(bots[0].arrivedAtTarget() || (System.currentTimeMillis() - lastUpdated[0]) > 3){
-            bots[0].findNextPath(boardManager.getEnemyPossessedPoints());
-            System.out.println("Changed path of Bot 0");
-            lastUpdated[0] = System.currentTimeMillis();
+        for(Bot bot: bots){
+            bot.updatePath();
         }
-        if(bots[1].arrivedAtTarget()|| (System.currentTimeMillis() - lastUpdated[1]) > 3){
-            bots[1].findNextPath(boardManager.getNonPossessedPoints());
-            System.out.println("Changed path of Bot 1");
-            lastUpdated[1] = System.currentTimeMillis();
-        }
-        if(bots[2].arrivedAtTarget() || (System.currentTimeMillis() - lastUpdated[2]) > 3){
-            bots[2].findNextPath(boardManager.getEnemyPossessedPoints());
-            System.out.println("Changed path of Bot 2");
-            lastUpdated[2] = System.currentTimeMillis();
-        }*/
+
 
         //System.out.println("Update every " + (System.currentTimeMillis() -lastUpdated) * 1.0/1000.0 + " seconds.");
         //lastUpdated = System.currentTimeMillis();

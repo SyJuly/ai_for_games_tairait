@@ -53,24 +53,30 @@ public abstract class Bot {
             return;
         }
 
-        int[] currentTarget = path[pathIndex];
-        if(hasSteppedOnTarget(currentTarget)){
+        int[] nextTarget = path[pathIndex];
+        if(hasSteppedOnTarget(nextTarget)){
             //System.out.println("AI.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
-            pathIndex++;
-            //botManager.get.releasePredictedOwnership(currentTarget[0], currentTarget[1], botCode);
-            if(pathIndex > path.length - 1 ){
-                path = null;
-                currentDirection = WAIT_DIRECTION;
-                if(botCode == 0){
-                    //System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
-                }
+
+            if((pathIndex + 1) <= path.length - 1){
+                pathIndex++;
+                this.lastX = x;
+                this.lastY = y;
+            } else {
+                resetTarget();
                 return;
             }
-            this.lastX = x;
-            this.lastY = y;
         }
 
         setDirection();
+    }
+
+    private void resetTarget() {
+        path = null;
+        currentTarget = null;
+        currentDirection = WAIT_DIRECTION;
+        if(botCode == 0){
+            //System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
+        }
     }
 
     private boolean hasSteppedOnTarget(int[] currentTarget){
@@ -189,7 +195,21 @@ public abstract class Bot {
         currentDirection = new float[]{1,1};
     }
 
-    public abstract void findNextPath(List<Point> points);
+    public void updatePath(){
+
+        if(currentTarget == null || (path != null && pathIndex > path.length - 1)){
+            return;
+        }
+
+        int[][] path = botManager.getPath((int)x, (int)y,currentTarget, botCode);
+        if(path == null || (path != null && path.length < 2)){
+            System.out.println("Bot " + botCode + " did something wrong. Path from: " + (int)x +","+ (int)y + " to " + currentTarget + "...pathIndex?" + pathIndex + " from pathlength: " + path.length);
+            resetTarget();
+            return;
+        }
+        setPath(path);
+    }
+    public abstract void updateTarget(List<Point> points);
 
     public boolean arrivedAtTarget(){
         return path == null;

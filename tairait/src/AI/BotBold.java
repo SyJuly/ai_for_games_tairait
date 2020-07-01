@@ -16,8 +16,35 @@ public class BotBold extends Bot {
         this.networkClient = networkClient;
     }
 
-
     @Override
+    public void updateTarget(List<Point> allEnemiesPoints) {
+
+
+        if(!arrivedAtTarget()) {
+            return;
+        }
+
+        Point target;
+        if (allEnemiesPoints.size() < 1) {
+            return;
+        }
+        List<List<Point>> clusters = clusterAssistent.getTeamPointClusters();
+
+        if (clusters.size() < 1) {
+            target = getClosestTargetNotSelf(allEnemiesPoints);
+        } else {
+            List<Point> biggestCluster = getBiggestCluster(clusters);
+            //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
+            target = getTargetWithMaxDistance(biggestCluster);
+
+        }
+        if (target == null || target.isPoint((int) x, (int) y)) {
+            return;
+        }
+        currentTarget = target;
+    }
+
+
     public void findNextPath(List<Point> enemiesPoints) {
         int[][] path;
 
