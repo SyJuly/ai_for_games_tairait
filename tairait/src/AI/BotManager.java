@@ -69,4 +69,10 @@ public class BotManager {
     public List<Point> getOwnedPoints() {
         return boardManager.getOwnedPoints();
     }
+
+    public void stop(){
+
+        botManagerUpdateAssistent.stop();
+        botManagerClusterAssistent.stop();
+    }
 }

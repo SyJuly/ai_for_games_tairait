@@ -57,6 +57,7 @@ public class Client implements Runnable {
 
             //boardManager.printScore();
         }
+        moveDirector.stop();
 
     }
 

@@ -14,6 +14,8 @@ public class BotManagerClusterAssistent implements Runnable {
     private List<List<Point>> teamPointClusters;
     private List<List<Point>> nonPossessedPointClusters;
 
+    private boolean isStopped = false;
+
     public BotManagerClusterAssistent(BoardManager boardManager){
         this.boardManager = boardManager;
         clusterer = new Clusterer(boardManager);
@@ -21,7 +23,7 @@ public class BotManagerClusterAssistent implements Runnable {
 
     @Override
     public void run() {
-        while(true){
+        while(!isStopped){
             enemyPossessedPointClusters = clusterer.cluster(boardManager.getEnemyPossessedPoints());
             nonPossessedPointClusters = clusterer.cluster(boardManager.getNonPossessedPoints());
             teamPointClusters = getEnemyPossessedPointClustersDifferentiated();
@@ -54,5 +56,9 @@ public class BotManagerClusterAssistent implements Runnable {
         points.addAll(boardManager.getEnemyPossessedPoints());
         points.addAll(boardManager.getNonPossessedPoints());
         return points;
+    }
+
+    public void stop(){
+        isStopped = true;
     }
 }

@@ -9,6 +9,8 @@ public class BotManagerUpdateAssistent implements Runnable {
     private BoardManager boardManager;
     private boolean isRandom;
     private Bot[] bots;
+    private boolean isStopped = false;
+
 
     public BotManagerUpdateAssistent(BoardManager boardManager, boolean isRandom, Bot[] bots){
         this.boardManager = boardManager;
@@ -19,7 +21,7 @@ public class BotManagerUpdateAssistent implements Runnable {
 
     @Override
     public void run() {
-        while(true){
+        while(!isStopped){
             updateBots();
         }
     }
@@ -48,5 +50,9 @@ public class BotManagerUpdateAssistent implements Runnable {
         //System.out.println("Update every " + (System.currentTimeMillis() -lastUpdated) * 1.0/1000.0 + " seconds.");
         lastUpdated = System.currentTimeMillis();
 
+    }
+
+    public void stop(){
+        isStopped = true;
     }
 }
