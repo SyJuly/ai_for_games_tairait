@@ -1,6 +1,7 @@
 package PathFinding;
 
 import Board.Point;
+import lenz.htw.tiarait.net.NetworkClient;
 
 import java.util.*;
 
@@ -73,11 +74,11 @@ public class AStar {
         return nodes[currentNode.pos[0] + neighbour[0]][currentNode.pos[1] + neighbour[1]] == null;
     }
 
-    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, Point[][] board, boolean avoidCenter, int botCode) {
+    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, Point[][] board, float[][] bots, boolean avoidCenter, int botCode) {
         if(board[targetX][targetY].statusCode == ownTeamCode){
             System.out.println("Something went wrong. Set owned point as target!!!!!!!!!!!!!!!!!!!!! It was bot " + botCode);
         }
-        prepareGraph(board, ownTeamCode, botCode);
+        prepareGraph(board, bots, ownTeamCode, botCode);
         List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter, botCode);
         if(nodePath == null){
             return null;
@@ -211,7 +212,7 @@ public class AStar {
     }
 
 
-    public void prepareGraph(Point[][] board, int ownTeamCode, int botOwner) {
+    public void prepareGraph(Point[][] board, float[][] bots, int ownTeamCode, int botOwner) {
         //Set<Node> targets = new HashSet<>();
         for(int x = 0; x < nodes.length; x++){
             for(int y = 0; y < nodes[x].length; y++){
@@ -222,7 +223,17 @@ public class AStar {
                 nodes[x][y].reset(botOwner);
                 for(int e = 0; e < node.adjacency.size(); e++){
                     Edge edge = node.adjacency.get(e);
-                    int statusCode = board[edge.target.pos[0]][edge.target.pos[1]].statusCode;
+                    int targetX = edge.target.pos[0];
+                    int targetY = edge.target.pos[1];
+                    int statusCode = board[targetX][targetY].statusCode;
+                    int distanceCost = 0;
+
+                    for(int b = 0; b < bots.length; b++){
+                        double distance = Math.sqrt((targetY - bots[b][1]) * (targetY - bots[b][1]) + (targetX - bots[b][0]) * (targetX - bots[b][0]));
+                        if(distance < 3){
+                            distanceCost++;
+                        }
+                    }
 
                     if(statusCode == ownTeamCode){
                         edge.preference_cost = OWNER_COST;
@@ -232,6 +243,7 @@ public class AStar {
                     } else if(statusCode == 0){
                         edge.preference_cost = 0;
                     }
+                    edge.preference_cost += distanceCost;
                 }
             }
         }

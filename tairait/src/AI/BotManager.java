@@ -11,6 +11,7 @@ import java.util.List;
 public class BotManager {
     private final int NUM_OF_BOTS = 3;
 
+    private NetworkClient nc;
     private AStar pathFinder;
     private BoardManager boardManager;
     private BotManagerClusterAssistent botManagerClusterAssistent;
@@ -20,6 +21,7 @@ public class BotManager {
 
     public BotManager(BoardManager boardManager, boolean isRandom, NetworkClient nc){
         this.boardManager = boardManager;
+        this.nc = nc;
         botManagerClusterAssistent = new BotManagerClusterAssistent(boardManager);
         pathFinder = new AStar(boardManager.getBoard());
         bots[1] = new BotQuick(this, botManagerClusterAssistent,nc, null);
@@ -34,12 +36,23 @@ public class BotManager {
 
     public int[][] getPath(int startX, int startY, Point target, int botCode){
         boolean avoidCenter = botCode == 1 ? true: false;
-        return pathFinder.AStarSearch(startX, startY,target.x,target.y, boardManager.getBoard(), avoidCenter, botCode);
+        return pathFinder.AStarSearch(startX, startY,target.x,target.y, boardManager.getBoard(), getBotPositions(), avoidCenter, botCode);
     }
 
     public int[][] getPath(int startX, int startY, int targetX, int targetY, int botCode){
         boolean avoidCenter = botCode == 1 ? true: false;
-        return pathFinder.AStarSearch(startX, startY,targetX,targetY, boardManager.getBoard(), avoidCenter, botCode);
+        return pathFinder.AStarSearch(startX, startY,targetX,targetY, boardManager.getBoard(),getBotPositions(), avoidCenter, botCode);
+    }
+
+    public float[][] getBotPositions(){
+        float[][] botPositions = new float[4*NUM_OF_BOTS][2];
+        for(int t = 0; t < 4; t++){
+            for(int b = 0; b < NUM_OF_BOTS; b++){
+                botPositions[t * NUM_OF_BOTS + b][0] = nc.getX(t , b);
+                botPositions[t * NUM_OF_BOTS + b][1] = nc.getY(t , b);
+            }
+        }
+        return botPositions;
     }
 
     public void setTeam(int ownTeam){
