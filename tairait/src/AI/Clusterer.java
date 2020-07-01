@@ -25,6 +25,10 @@ public class Clusterer {
 
         for (int i = 0; i < points.size(); i++) {
             Point point = points.get(i);
+            if(point == null){
+                System.out.println("WWWWWWWWWWWWWWWWWWWWWWWWWWWHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHAAAAAAAAAAAAAAAAAAAAAAAT");
+                continue;
+            }
             if (visited.containsKey(point)) {
                 continue;
             }
@@ -52,6 +56,9 @@ public class Clusterer {
         int index = 0;
         while (index < seeds.size()) {
             Point current = seeds.get(index);
+            if(point == null){
+                System.out.println("whats happening");
+            }
             // only check non-visited points
             if (!visited.containsKey(current)) {
                 List<Point> currentNeighbors = getNeighbors(current, points);
@@ -79,6 +86,9 @@ public class Clusterer {
 
         for(int n = 0; n < AStar.NEIGHBOURS.length; n++){
             int neighbour[] = AStar.NEIGHBOURS[n];
+            if(point == null){
+                System.out.println("that is so weird");
+            }
             int neighbourX = point.x + neighbour[0];
             int neighbourY = point.y + neighbour[1];
             if((neighbourX > boardManager.WORLD_SIZE - 1 || neighbourX < 0)||

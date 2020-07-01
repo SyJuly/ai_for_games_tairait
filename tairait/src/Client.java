@@ -20,7 +20,7 @@ public class Client implements Runnable {
     public void run() {
 
         BoardManager boardManager = new BoardManager();
-        NetworkClient nc =  new NetworkClient(null, name);
+        NetworkClient nc =  new NetworkClient(""/*"87.122.96.153"*/, name);
 
         boardManager.setObstacles(nc);
         BotManager moveDirector = new BotManager(boardManager, isRandom, nc);

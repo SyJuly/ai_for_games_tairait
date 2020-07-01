@@ -120,9 +120,6 @@ public abstract class Bot {
         }
         this.pathIndex = 1;
         this.path = path;
-        if(botCode == 1){
-            System.out.println("Pathlength is: " + path.length);
-        }
         //System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
         setDirection();
         isBlocked = false;
@@ -170,7 +167,7 @@ public abstract class Bot {
         for(int i = 0; i < points.size(); i++){
             Point point = points.get(i);
             float distance = (point.y - y) * (point.y - y) + (point.x - x) * (point.x - x);
-            if(distance < validMinDistance && distance > MIN_TARGET_DISTANCE_PER_SECOND){
+            if(distance < validMinDistance && distance > MIN_TARGET_DISTANCE_PER_SECOND && point.statusCode != ownTeamCode){
                 validMinDistance = distance;
                 validMinPoint = point;
             }

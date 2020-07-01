@@ -24,8 +24,8 @@ public class BotManagerClusterAssistent implements Runnable {
     @Override
     public void run() {
         while(!isStopped){
-            enemyPossessedPointClusters = clusterer.cluster(boardManager.getEnemyPossessedPoints());
-            nonPossessedPointClusters = clusterer.cluster(boardManager.getNonPossessedPoints());
+            enemyPossessedPointClusters = clusterer.cluster(copyPointList(boardManager.getEnemyPossessedPoints()));
+            nonPossessedPointClusters = clusterer.cluster(copyPointList(boardManager.getNonPossessedPoints()));
             teamPointClusters = getEnemyPossessedPointClustersDifferentiated();
         }
     }
@@ -37,6 +37,12 @@ public class BotManagerClusterAssistent implements Runnable {
             clusters.addAll(clusterer.cluster(enemyPoints.get(i)));
         }
         return clusters;
+    }
+
+    private List<Point> copyPointList(List<Point> points){
+        List<Point> copiedList = new ArrayList<>();
+        copiedList.addAll(points);
+        return copiedList;
     }
 
     public List<List<Point>> getTeamPointClusters(){

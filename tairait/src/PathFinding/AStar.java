@@ -17,12 +17,12 @@ public class AStar {
             {0,-1}};
 
     private final static int DEFAULT_COST = 10;
-    private final static int OWNER_COST = 2000;
+    private final static int OWNER_COST = 2000000;
     private final static int ENEMY_COST = -7;
     private Node[][] nodes;
     private int ownTeamCode;
 
-    private double normalDistributionFactorA =(1.0/(0.5*Math.sqrt(2 * Math.PI)));
+    private double normalDistributionFactorA =(1.0/(4.453*Math.sqrt(2 * Math.PI)));
 
     public AStar(Point[][] world){
         nodes = new Node[world.length][world[0].length];
@@ -38,9 +38,10 @@ public class AStar {
                 if(nodes[x][y] == null){
                     continue;
                 }
-                double eX = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((x-15.0)/0.5, 2));
-                double eY = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((y-15.0)/0.5,2));
-                double avoidCenter_cost = (1 + eX + eY) * 10000000;
+                double eX = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((x-15.5)/4.453, 2));
+                double eY = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((y-15.5)/4.453,2));
+                double avoidCenter_cost = (1 + eX + eY) * 100;
+                //System.out.println(x+"," +y + "--cost:" +avoidCenter_cost);
                 for(int n = 0; n < NEIGHBOURS.length; n++){
                     int neighbour[] = NEIGHBOURS[n];
                     Node neighbourNode = nodes[x + neighbour[0]][y + neighbour[1]];
