@@ -59,6 +59,11 @@ public class BoardManager {
                     enemyPossessedPoints.add(point);
                 }
                 nonPossessedPoints.remove(point);
+            } else if(prevCode == (ownTeam +1)){
+                enemyPossessedPoints.add(point);
+            }
+            if(code == (ownTeam + 1)){
+                enemyPossessedPoints.remove(point);
             }
         }
         if (prevCode > 0) {

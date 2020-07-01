@@ -44,6 +44,9 @@ public class BotManager {
 
     public void setTeam(int ownTeam){
         this.ownTeam = ownTeam;
+        for(Bot bot: bots){
+            bot.ownTeamCode = ownTeam + 1;
+        }
         pathFinder.setOwnTeamCode(ownTeam + 1);
     }
 

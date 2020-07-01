@@ -10,11 +10,13 @@ import java.util.Random;
 public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
     private final float MAX_TARGET_DISTANCE_PER_SECOND = Float.POSITIVE_INFINITY;
+    private final float MIN_TARGET_DISTANCE_PER_SECOND = 2;
 
     protected BotManager botManager;
     protected BotManagerClusterAssistent clusterAssistent;
     public float speed;
     public int botCode;
+    public int ownTeamCode;
     protected float maxTargetDistance;
     protected float x;
     protected float y;
@@ -53,6 +55,10 @@ public abstract class Bot {
             return;
         }
 
+        if(pathIndex > path.length -1){
+            resetTarget();
+        }
+
         int[] nextTarget = path[pathIndex];
         if(hasSteppedOnTarget(nextTarget)){
             //System.out.println("AI.Bot:" + botCode+" has passed target was true: " + pathIndex + "| direction:" + currentDirection[0]+","+currentDirection[1]);
@@ -73,6 +79,7 @@ public abstract class Bot {
     private void resetTarget() {
         path = null;
         currentTarget = null;
+        pathIndex = 1;
         currentDirection = WAIT_DIRECTION;
         if(botCode == 0){
             //System.out.println("VIIIIIIIIIIIIICTTTOOORYYYY BOT " + botCode + " REACHED TARGET: " + x + "|" + y);
@@ -127,12 +134,12 @@ public abstract class Bot {
             }
         }
 
-        int[][] path = botManager.getPath((int)x, (int)y, randomX, randomY, botCode);
-        if(path == null || path.length < 2){
+        int[][] nextPath = botManager.getPath((int)x, (int)y, randomX, randomY, botCode);
+        if(nextPath == null || nextPath.length < 2){
             findRandomPath();
             return;
         }
-        setPath(path);
+        setPath(nextPath);
     }
 
 
@@ -156,7 +163,7 @@ public abstract class Bot {
         for(int i = 0; i < points.size(); i++){
             Point point = points.get(i);
             float distance = (point.y - y) * (point.y - y) + (point.x - x) * (point.x - x);
-            if(validMinPoint == null || (distance < validMinDistance && !point.isPoint((int)x, (int)y))){
+            if(distance < validMinDistance && distance > MIN_TARGET_DISTANCE_PER_SECOND){
                 validMinDistance = distance;
                 validMinPoint = point;
             }
@@ -201,13 +208,13 @@ public abstract class Bot {
             return;
         }
 
-        int[][] path = botManager.getPath((int)x, (int)y,currentTarget, botCode);
-        if(path == null || (path != null && path.length < 2)){
+        int[][] nextPath = botManager.getPath((int)x, (int)y,currentTarget, botCode);
+        if(nextPath == null || (nextPath != null && nextPath.length < 2)){
             System.out.println("Bot " + botCode + " did something wrong. Path from: " + (int)x +","+ (int)y + " to " + currentTarget + "...pathIndex?" + pathIndex);
             resetTarget();
             return;
         }
-        setPath(path);
+        setPath(nextPath);
     }
     public abstract void updateTarget(List<Point> points);
 

@@ -73,7 +73,10 @@ public class AStar {
     }
 
     public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, Point[][] board, boolean avoidCenter, int botCode) {
-        prepareGraph(board,ownTeamCode, botCode);
+        if(board[targetX][targetY].statusCode == ownTeamCode){
+            System.out.println("Something went wrong. Set owned point as target!!!!!!!!!!!!!!!!!!!!! It was bot " + botCode);
+        }
+        prepareGraph(board, ownTeamCode, botCode);
         List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter, botCode);
         if(nodePath == null){
             return null;
@@ -135,7 +138,7 @@ public class AStar {
                 if(avoidCenter){
                     cost += edge.avoidCenter_cost;
                 }
-                if(neighourNode.markedAsToBeOwnedBy > 0){
+                if(neighourNode.markedAsToBeOwnedBy >= 0){
                     cost += OWNER_COST;
                 }
 
@@ -166,7 +169,7 @@ public class AStar {
             if(next.markedAsToBeOwnedBy > 0){
                 pathLeadingOverOwnTeam++;
             }
-            next.markedAsToBeOwnedBy = owner;
+            markOwnership(owner, next);
             path.add(next);
 
             Edge nextEdge = getEdge(next, next.parent);
@@ -185,10 +188,24 @@ public class AStar {
         return path;
     }
 
-    private Edge getEdge(Node node1, Node node2) {
-        for(int i = 0; i < node1.adjacency.size(); i++){
-            if(node1.adjacency.get(i).target == node2){
-                return node1.adjacency.get(i);
+    private void markOwnership(int owner, Node next) {
+        next.markedAsToBeOwnedBy = owner;
+        if(owner == 2){
+            for(Edge edge : next.adjacency){
+                if(edge.target.pos[0] == next.pos[0] || edge.target.pos[1] == next.pos[1]){
+                    next.markedAsToBeOwnedBy = owner;
+                }
+            }
+        }
+    }
+
+    private Edge getEdge(Node nodeTo, Node nodeFrom) {
+        if(nodeFrom == null | nodeTo == null){
+            return null;
+        }
+        for(int i = 0; i < nodeFrom.adjacency.size(); i++){
+            if(nodeFrom.adjacency.get(i).target == nodeTo){
+                return nodeFrom.adjacency.get(i);
             }
         }
         return null;
@@ -228,6 +245,7 @@ public class AStar {
             node.markedAsToBeOwnedBy = -1;
         }
     }
+
 
     private Node getNode(int x, int y){
         if(nodes[x][y] == null){

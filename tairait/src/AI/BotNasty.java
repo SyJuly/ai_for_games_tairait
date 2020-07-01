@@ -17,7 +17,8 @@ public class BotNasty extends Bot {
     public void updateTarget(List<Point> allEnemiesPoints) {
 
 
-        if(!arrivedAtTarget()) {
+        String string = "Position: " + x + "," + y + "| Before currentTarget: " + currentTarget;
+        if(!arrivedAtTarget() && currentTarget != null && currentTarget.statusCode != ownTeamCode) {
             return;
         }
 
@@ -28,15 +29,21 @@ public class BotNasty extends Bot {
         List<List<Point>> clusters = clusterAssistent.getEnemyPossessedPointClusters();
 
         if (clusters.size() < 1) {
+
             target = getClosestTargetNotSelf(allEnemiesPoints);
+            string += " ---no clusters so target was: " + target;
         } else {
-            List<Point> nearestCluster = getNearestCluster(clusters);
+            List<Point> biggestCluster = getBiggestCluster(clusters);
             //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
-            target = getClosestTargetNotSelf(nearestCluster);
+            target = getClosestTargetNotSelf(biggestCluster);
+            string += " ---chosen target is: " + target + " ------------------------------------- cluster had " + biggestCluster.size()+ " points";
 
         }
         if (target == null || target.isPoint((int) x, (int) y)) {
             return;
+        }
+        if(target.statusCode == ownTeamCode){
+            System.out.println(string);
         }
         currentTarget = target;
     }

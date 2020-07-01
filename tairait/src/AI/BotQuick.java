@@ -15,7 +15,7 @@ public class BotQuick extends Bot {
     public void updateTarget(List<Point> allFreePoints) {
 
 
-        if(!arrivedAtTarget()) {
+        if(!arrivedAtTarget() && currentTarget != null &&  currentTarget.statusCode != ownTeamCode) {
             return;
         }
 
@@ -33,7 +33,9 @@ public class BotQuick extends Bot {
 
         if (target == null || target.isPoint((int) x, (int) y)) {
             return;
-        }currentTarget = target;
+        }
+
+        currentTarget = target;
 
     }
 

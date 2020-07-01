@@ -21,7 +21,7 @@ public class BotBold extends Bot {
     public void updateTarget(List<Point> allEnemiesPoints) {
 
 
-        if(!arrivedAtTarget()) {
+        if(!arrivedAtTarget() && currentTarget != null && currentTarget.statusCode != ownTeamCode) {
             return;
         }
 

@@ -20,13 +20,13 @@ public class BotManagerUpdateAssistent implements Runnable {
     @Override
     public void run() {
         while(true){
-            updateBotsTargets();
+            updateBots();
         }
     }
 
-    private long[] lastUpdated = new long[]{System.currentTimeMillis(), System.currentTimeMillis(),System.currentTimeMillis()};
+    private long lastUpdated = System.currentTimeMillis();
 
-    public void updateBotsTargets(){
+    public void updateBots(){
         if(isRandom){
             for(Bot bot : bots){
                 if(bot.arrivedAtTarget()){
@@ -46,7 +46,7 @@ public class BotManagerUpdateAssistent implements Runnable {
 
 
         //System.out.println("Update every " + (System.currentTimeMillis() -lastUpdated) * 1.0/1000.0 + " seconds.");
-        //lastUpdated = System.currentTimeMillis();
+        lastUpdated = System.currentTimeMillis();
 
     }
 }
