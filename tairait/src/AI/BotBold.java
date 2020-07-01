@@ -11,9 +11,10 @@ public class BotBold extends Bot {
     private NetworkClient networkClient;
     //overwrite best and avoid own
 
-    public BotBold(BotManager botManager, BotManagerClusterAssistent assistent, NetworkClient networkClient) {
+    public BotBold(BotManager botManager, BotManagerClusterAssistent assistent, NetworkClient networkClient, Point initialTarget) {
         super(botManager, assistent,0.67f, 2);
         this.networkClient = networkClient;
+        currentTarget = initialTarget;
     }
 
     @Override

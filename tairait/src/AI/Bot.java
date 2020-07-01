@@ -203,7 +203,7 @@ public abstract class Bot {
 
         int[][] path = botManager.getPath((int)x, (int)y,currentTarget, botCode);
         if(path == null || (path != null && path.length < 2)){
-            System.out.println("Bot " + botCode + " did something wrong. Path from: " + (int)x +","+ (int)y + " to " + currentTarget + "...pathIndex?" + pathIndex + " from pathlength: " + path.length);
+            System.out.println("Bot " + botCode + " did something wrong. Path from: " + (int)x +","+ (int)y + " to " + currentTarget + "...pathIndex?" + pathIndex);
             resetTarget();
             return;
         }

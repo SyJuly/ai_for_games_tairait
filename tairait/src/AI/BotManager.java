@@ -22,9 +22,9 @@ public class BotManager {
         this.boardManager = boardManager;
         botManagerClusterAssistent = new BotManagerClusterAssistent(boardManager);
         pathFinder = new AStar(boardManager.getBoard());
-        bots[1] = new BotQuick(this, botManagerClusterAssistent);
+        bots[1] = new BotQuick(this, botManagerClusterAssistent, null);
         bots[0] = new BotNasty(this, botManagerClusterAssistent);
-        bots[2] = new BotBold(this, botManagerClusterAssistent,nc);
+        bots[2] = new BotBold(this, botManagerClusterAssistent,nc, null);
 
         botManagerUpdateAssistent = new BotManagerUpdateAssistent(boardManager, isRandom, bots);
 

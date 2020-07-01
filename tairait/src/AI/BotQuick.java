@@ -6,8 +6,9 @@ import java.util.List;
 
 public class BotQuick extends Bot {
 
-    public BotQuick(BotManager botManager, BotManagerClusterAssistent assistent) {
+    public BotQuick(BotManager botManager, BotManagerClusterAssistent assistent, Point initialTarget) {
         super(botManager, assistent,1.1f, 1);
+        currentTarget = initialTarget;
     }
 
     @Override

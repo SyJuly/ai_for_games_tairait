@@ -158,4 +158,16 @@ public class BoardManager {
         }
         return pointsOfEnemies;
     }
+
+    public Point getXAxisPoint(int i) {
+        Point point = null;
+        int index = i < 0 ? WORLD_SIZE - 1 : 0;
+        while(point == null){
+            index += i;
+            if(board[index][WORLD_SIZE/2].statusCode >= 0 && isInInnerRing(index, WORLD_SIZE/2)){
+                point = board[index][WORLD_SIZE/2];
+            }
+        }
+        return point;
+    }
 }
