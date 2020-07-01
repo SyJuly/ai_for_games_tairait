@@ -18,6 +18,7 @@ public class AStar {
             {0,-1}};
 
     private final static int DEFAULT_COST = 10;
+    private final static int EXTRA_EMPTY_POINT_PENALTY = 50;
     private final static int OWNER_COST = 2000000;
     private final static int ENEMY_COST = -7;
     private Node[][] nodes;
@@ -74,11 +75,11 @@ public class AStar {
         return nodes[currentNode.pos[0] + neighbour[0]][currentNode.pos[1] + neighbour[1]] == null;
     }
 
-    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, Point[][] board, float[][] bots, boolean avoidCenter, int botCode) {
+    public int[][] AStarSearch(int startX, int startY, int targetX, int targetY, Point[][] board, float[][] bots, boolean avoidCenter, boolean emptyPointPenalty, int botCode) {
         if(board[targetX][targetY].statusCode == ownTeamCode){
             System.out.println("Something went wrong. Set owned point as target!!!!!!!!!!!!!!!!!!!!! It was bot " + botCode);
         }
-        prepareGraph(board, bots, ownTeamCode, botCode);
+        prepareGraph(board, bots, emptyPointPenalty, ownTeamCode, botCode);
         List<Node> nodePath = AStarSearch(nodes[startX][startY], nodes[targetX][targetY], avoidCenter, botCode);
         if(nodePath == null){
             return null;
@@ -212,7 +213,7 @@ public class AStar {
     }
 
 
-    public void prepareGraph(Point[][] board, float[][] bots, int ownTeamCode, int botOwner) {
+    public void prepareGraph(Point[][] board, float[][] bots, boolean emptyPointPenalty, int ownTeamCode, int botOwner) {
         //Set<Node> targets = new HashSet<>();
         for(int x = 0; x < nodes.length; x++){
             for(int y = 0; y < nodes[x].length; y++){
@@ -241,7 +242,7 @@ public class AStar {
                     } else if(statusCode > 0){
                         edge.preference_cost = ENEMY_COST;
                     } else if(statusCode == 0){
-                        edge.preference_cost = 0;
+                        edge.preference_cost = emptyPointPenalty ? EXTRA_EMPTY_POINT_PENALTY : 0;
                     }
                     edge.preference_cost += distanceCost;
                 }

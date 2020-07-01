@@ -31,13 +31,10 @@ public class BotNasty extends Bot {
         if (clusters.size() < 1) {
 
             target = getClosestTargetNotSelf(allEnemiesPoints);
-            string += " ---no clusters so target was: " + target;
         } else {
             List<Point> biggestCluster = getBiggestCluster(clusters);
             //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
             target = getClosestTargetNotSelf(biggestCluster);
-            string += " ---chosen target is: " + target + " ------------------------------------- cluster had " + biggestCluster.size()+ " points";
-
         }
         if (target == null || target.isPoint((int) x, (int) y)) {
             return;

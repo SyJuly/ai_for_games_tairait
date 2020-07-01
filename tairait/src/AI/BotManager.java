@@ -36,12 +36,14 @@ public class BotManager {
 
     public int[][] getPath(int startX, int startY, Point target, int botCode){
         boolean avoidCenter = botCode == 1 ? true: false;
-        return pathFinder.AStarSearch(startX, startY,target.x,target.y, boardManager.getBoard(), getBotPositions(), avoidCenter, botCode);
+        boolean emptyPointPenalty = botCode == 0 ? true: false;
+        return pathFinder.AStarSearch(startX, startY,target.x,target.y, boardManager.getBoard(), getBotPositions(), avoidCenter,emptyPointPenalty, botCode);
     }
 
     public int[][] getPath(int startX, int startY, int targetX, int targetY, int botCode){
         boolean avoidCenter = botCode == 1 ? true: false;
-        return pathFinder.AStarSearch(startX, startY,targetX,targetY, boardManager.getBoard(),getBotPositions(), avoidCenter, botCode);
+        boolean emptyPointPenalty = botCode == 0 ? true: false;
+        return pathFinder.AStarSearch(startX, startY,targetX,targetY, boardManager.getBoard(),getBotPositions(), avoidCenter, emptyPointPenalty, botCode);
     }
 
     public float[][] getBotPositions(){
