@@ -40,7 +40,7 @@ public class AStar {
                 }
                 double eX = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((x-15.0)/0.5, 2));
                 double eY = normalDistributionFactorA* Math.pow(Math.E, -0.5 * Math.pow((y-15.0)/0.5,2));
-                double avoidCenter_cost = 1 + eX + eY;
+                double avoidCenter_cost = (1 + eX + eY) * 10000000;
                 for(int n = 0; n < NEIGHBOURS.length; n++){
                     int neighbour[] = NEIGHBOURS[n];
                     Node neighbourNode = nodes[x + neighbour[0]][y + neighbour[1]];

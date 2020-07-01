@@ -33,6 +33,10 @@ public class BotQuick extends Bot {
         for(int i = 0; i < distances.length; i++){
             Point p = points.get(i);
             float distanceSum = 0;
+            float distanceToSelf = (p.y - y) * (p.y - y) + (p.x - x) * (p.x - x);
+            if(distanceToSelf < 80){
+                continue;
+            }
             for(int t = 0; t < 4; t++){
                 for(int b = 0; b < 3; b++){
                     float teamBotX = networkClient.getX(t,b);

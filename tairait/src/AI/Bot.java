@@ -57,6 +57,7 @@ public abstract class Bot {
 
         if(pathIndex > path.length -1){
             resetTarget();
+            return;
         }
 
         int[] nextTarget = path[pathIndex];
@@ -110,12 +111,18 @@ public abstract class Bot {
 
     public void setPath(int[][] path){
         isBlocked = true;
+        if(path == null){
+            return;
+        }
         if(path != null && path.length < 2){
             System.out.println("Invalid path: " + Arrays.toString(path[0]) + " to " + Arrays.toString(path[path.length-1]));
             return;
         }
         this.pathIndex = 1;
         this.path = path;
+        if(botCode == 1){
+            System.out.println("Pathlength is: " + path.length);
+        }
         //System.out.println("Setting path for bot: " + botCode + "| Current position: " + x + "," + y);
         setDirection();
         isBlocked = false;
