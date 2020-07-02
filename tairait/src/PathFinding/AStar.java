@@ -225,7 +225,7 @@ public class AStar {
                 }
                 nodes[x][y].reset(botOwner);
                 if(isRandom){
-                    continue;
+                    //continue;
                 }
                 for(int e = 0; e < node.adjacency.size(); e++){
                     Edge edge = node.adjacency.get(e);

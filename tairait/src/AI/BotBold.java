@@ -25,17 +25,19 @@ public class BotBold extends Bot {
             return;
         }
 
-        Point target;
-        if (allEnemiesPoints.size() < 1) {
-            return;
-        }
+        Point target = null;
+
         List<List<Point>> clusters = clusterAssistent.getTeamPointClusters();
 
         if (clusters.size() < 1) {
-            target = getClosestTargetNotSelf(allEnemiesPoints);
+            /*Secondary Strategy*/
+            clusters = clusterAssistent.getNonPossessedPointClusters();
+            if(clusters.size() > 0) {
+                target = getClosestTargetNotSelf(getBiggestCluster(clusters));
+            }
         } else {
+            /*Primary Strategy*/
             List<Point> biggestCluster = getBiggestCluster(clusters);
-            //System.out.println("Position: "+ x+","+y+"----Sorted possessed points: " + Arrays.toString(nearestCluster.toArray()));
             target = getTargetWithMaxDistance(biggestCluster);
 
         }

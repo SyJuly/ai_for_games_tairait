@@ -19,6 +19,9 @@ public class BotManagerClusterAssistent implements Runnable {
     public BotManagerClusterAssistent(BoardManager boardManager){
         this.boardManager = boardManager;
         clusterer = new Clusterer(boardManager);
+        enemyPossessedPointClusters = new ArrayList<>();
+        teamPointClusters = new ArrayList<>();
+        nonPossessedPointClusters = new ArrayList<>();
     }
 
     @Override

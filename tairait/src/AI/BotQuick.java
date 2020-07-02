@@ -1,5 +1,6 @@
 package AI;
 
+import Board.BoardManager;
 import Board.Point;
 import lenz.htw.tiarait.net.NetworkClient;
 
@@ -22,8 +23,16 @@ public class BotQuick extends Bot {
             return;
         }
 
-        /*First Strategy*/
-        Point target = getPointFurthestFromOtherBots();
+
+
+        /*Primary Strategy*/
+        Point target = null;
+
+        if(botsAreFarAway()){
+            target = getClosestTargetNotSelf(clusterAssistent.getNonAndEnemyPossessedPoints());
+        } else {
+            target = getPointFurthestFromOtherBots();
+        }
 
         /*Alternative Strategy*/
         if(target == null){
@@ -37,6 +46,20 @@ public class BotQuick extends Bot {
 
         currentTarget = target;
 
+    }
+
+    private boolean botsAreFarAway() {
+        for(int t = 0; t < 4; t++){
+            for(int b = 0; b < 3; b++){
+                float teamBotX = networkClient.getX(t,b);
+                float teamBotY = networkClient.getY(t,b);
+                if((y - teamBotY) * (y - teamBotY) + (x - teamBotX) * (x - teamBotX) < 16){
+                    return false;
+                }
+            }
+
+        }
+        return true;
     }
 
     private Point getFurthestEmptyPoint(){
@@ -55,6 +78,9 @@ public class BotQuick extends Bot {
         float[] distances = new float[points.size()];
         for(int i = 0; i < distances.length; i++){
             Point p = points.get(i);
+            if(!BoardManager.isInInnerRing(p.x,p.y)){
+                continue;
+            }
             float distanceSum = 0;
             float distanceToSelf = (p.y - y) * (p.y - y) + (p.x - x) * (p.x - x);
             if(distanceToSelf < 80){

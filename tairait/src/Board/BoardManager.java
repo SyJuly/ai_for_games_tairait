@@ -35,9 +35,12 @@ public class BoardManager {
         for(int x = 0; x < board.length; x++){
             for(int y = 0; y < board[x].length; y++){
                 board[x][y] = new Point(x,y);
+
                 if(client.isWall(x,y)){
                     board[x][y].statusCode = -1;
                     counter++;
+                } else {
+                    nonPossessedPoints.add(board[x][y]);
                 }
 
             }

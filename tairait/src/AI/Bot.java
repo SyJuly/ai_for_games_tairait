@@ -1,5 +1,6 @@
 package AI;
 
+import Board.BoardManager;
 import Board.Point;
 import PathFinding.AStar;
 
@@ -153,7 +154,7 @@ public abstract class Bot {
         for(int i = 0; i < points.size(); i++){
             Point point = points.get(i);
             float distance = (point.y - y) * (point.y - y) + (point.x - x) * (point.x - x);
-            if(validMaxPoint == null || (distance > validMaxDistance && distance <= maxTargetDistance)){
+            if(distance > validMaxDistance && distance <= maxTargetDistance && point.statusCode != ownTeamCode){
                 validMaxDistance = distance;
                 validMaxPoint = point;
             }
@@ -166,6 +167,9 @@ public abstract class Bot {
         Point validMinPoint = null;
         for(int i = 0; i < points.size(); i++){
             Point point = points.get(i);
+            if(!BoardManager.isInInnerRing(point.x,point.y)){
+                continue;
+            }
             float distance = (point.y - y) * (point.y - y) + (point.x - x) * (point.x - x);
             if(distance < validMinDistance && distance > MIN_TARGET_DISTANCE_PER_SECOND && point.statusCode != ownTeamCode){
                 validMinDistance = distance;
