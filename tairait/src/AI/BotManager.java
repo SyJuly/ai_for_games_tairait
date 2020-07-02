@@ -23,7 +23,7 @@ public class BotManager {
         this.boardManager = boardManager;
         this.nc = nc;
         botManagerClusterAssistent = new BotManagerClusterAssistent(boardManager);
-        pathFinder = new AStar(boardManager.getBoard());
+        pathFinder = new AStar(boardManager.getBoard(), isRandom);
         bots[1] = new BotQuick(this, botManagerClusterAssistent,nc, null);
         bots[0] = new BotNasty(this, botManagerClusterAssistent);
         bots[2] = new BotBold(this, botManagerClusterAssistent,nc, null);

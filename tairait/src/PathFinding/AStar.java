@@ -23,10 +23,12 @@ public class AStar {
     private final static int ENEMY_COST = -7;
     private Node[][] nodes;
     private int ownTeamCode;
+    private boolean isRandom;
 
     private double normalDistributionFactorA =(1.0/(4.453*Math.sqrt(2 * Math.PI)));
 
-    public AStar(Point[][] world){
+    public AStar(Point[][] world, boolean isRandom){
+        this.isRandom = isRandom;
         nodes = new Node[world.length][world[0].length];
         for(int x = 0; x < world.length; x++){
             for(int y = 0; y < world[x].length; y++){
@@ -222,6 +224,9 @@ public class AStar {
                     continue;
                 }
                 nodes[x][y].reset(botOwner);
+                if(isRandom){
+                    continue;
+                }
                 for(int e = 0; e < node.adjacency.size(); e++){
                     Edge edge = node.adjacency.get(e);
                     int targetX = edge.target.pos[0];
@@ -244,7 +249,7 @@ public class AStar {
                     } else if(statusCode == 0){
                         edge.preference_cost = emptyPointPenalty ? EXTRA_EMPTY_POINT_PENALTY : 0;
                     }
-                    edge.preference_cost += distanceCost;
+                    edge.preference_cost += distanceCost * 2;
                 }
             }
         }

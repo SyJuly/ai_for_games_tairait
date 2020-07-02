@@ -22,11 +22,34 @@ public class BotQuick extends Bot {
             return;
         }
 
-        Point target = null;
-        if (allFreePoints.size() < 1) {
+        /*First Strategy*/
+        Point target = getPointFurthestFromOtherBots();
+
+        /*Alternative Strategy*/
+        if(target == null){
+            target = getFurthestEmptyPoint();
+        }
+
+
+        if (target == null || target.isPoint((int) x, (int) y)) {
             return;
         }
 
+        currentTarget = target;
+
+    }
+
+    private Point getFurthestEmptyPoint(){
+        List<List<Point>> clusters = clusterAssistent.getNonPossessedPointClusters();
+        if (clusters.size() < 1) {
+            return null;
+        }
+        List<Point> biggestCluster = getBiggestCluster(clusters);
+        return getTargetWithMaxDistance(biggestCluster);
+    }
+
+    private Point getPointFurthestFromOtherBots() {
+        Point target = null;
         float highestDistance = Float.NEGATIVE_INFINITY;
         List<Point> points = clusterAssistent.getNonAndEnemyPossessedPoints();
         float[] distances = new float[points.size()];
@@ -50,23 +73,8 @@ public class BotQuick extends Bot {
                 target = p;
             }
         }
-
-        /*List<List<Point>> clusters = clusterAssistent.getNonPossessedPointClusters();
-        if (clusters.size() < 1) {
-            return;
-        }
-        List<Point> biggestCluster = getBiggestCluster(clusters);
-        target = getTargetWithMaxDistance(biggestCluster);*/
-
-        if (target == null || target.isPoint((int) x, (int) y)) {
-            return;
-        }
-
-        currentTarget = target;
-
+        return target;
     }
-
-
 
 
     //Search free spaces away from other bots

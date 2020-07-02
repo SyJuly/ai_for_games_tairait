@@ -9,7 +9,7 @@ import java.util.Random;
 
 public abstract class Bot {
     private final float[] WAIT_DIRECTION = new float[]{0,0};
-    private final float MAX_TARGET_DISTANCE_PER_SECOND = Float.POSITIVE_INFINITY;
+    private final float MAX_TARGET_DISTANCE_PER_SECOND = 350; //is squared
     private final float MIN_TARGET_DISTANCE_PER_SECOND = 4;
 
     protected BotManager botManager;
